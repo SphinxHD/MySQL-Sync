@@ -35,6 +35,7 @@ public class Main extends JavaPlugin {
         main = this;
         registerListener();
         registerMySQL();
+
     }
 
     @Override

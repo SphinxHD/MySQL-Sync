@@ -4,9 +4,7 @@ import hd.sphinx.sync.Main;
 import hd.sphinx.sync.util.BukkitSerialization;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,14 +24,13 @@ public class ManageData {
             if (rs.next()) {
                 return;
             }
-            PreparedStatement ps = MySQL.getConnection().prepareStatement("INSERT INTO playerdata (player_uuid, player_name, inventory, last_joined) VALUES(?,?,?,?)");
+            PreparedStatement ps = MySQL.getConnection().prepareStatement("INSERT INTO playerdata (player_uuid, player_name, last_joined) VALUES(?,?,?)");
             ps.setString(1, String.valueOf(player.getUniqueId()));
             ps.setString(2, player.getName());
-            ps.setString(3, BukkitSerialization.playerInventoryToBase64(player.getInventory()));
             java.util.Date dNow = new Date( );
             SimpleDateFormat ft =
                     new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
-            ps.setString(4, ft.format(dNow));
+            ps.setString(3, ft.format(dNow));
             ps.executeUpdate();
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {
@@ -75,14 +72,14 @@ public class ManageData {
         return "null";
     }
 
-    public static void savePlayer(Player player) {
+    public static void savePlayer(Player player, String base64) {
         if (!MySQL.isConnected()) {
             MySQL.connectMySQL();
         }
         try {
-            PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE playerdata AS p SET p.player_name = ?, p.inventory, p.last_joined = ? WHERE p.player_uuid = ?");
+            PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE playerdata AS p SET p.player_name = ?, p.inventory = ?, p.last_joined = ? WHERE p.player_uuid = ?");
             ps.setString(1, player.getName());
-            ps.setString(2, BukkitSerialization.playerInventoryToBase64(player.getInventory()));
+            ps.setString(2, base64);
             java.util.Date dNow = new Date( );
             SimpleDateFormat ft =
                     new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
@@ -95,7 +92,7 @@ public class ManageData {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
                     @Override
                     public void run() {
-                        generatePlayer(player);
+                        savePlayer(player, base64);
                     }
                 }, 20);
             } else {
@@ -105,7 +102,7 @@ public class ManageData {
         }
     }
 
-    public static void setInventory(Player player) {
+    /**public static void setInventory(Player player) {
         try {
             ItemStack[] itemStacks = BukkitSerialization.itemStackArrayFromBase64(ManageData.loadPlayer(player));
             int i = 0;
@@ -117,5 +114,5 @@ public class ManageData {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
+    }**/
 }
