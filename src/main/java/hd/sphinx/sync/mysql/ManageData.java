@@ -1,6 +1,7 @@
 package hd.sphinx.sync.mysql;
 
 import hd.sphinx.sync.Main;
+import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -70,19 +71,24 @@ public class ManageData {
                 result = rs.getString("inventory");
                 InventoryManager.loadItem(result, player);
                 result = rs.getString("gamemode");
-                if (!(result == null)) {
+                if (result != null) {
                     player.setGameMode(GameMode.valueOf(result));
                 }
                 result = rs.getString("health");
-                if (!(result == null)) {
+                if (result != null) {
                     player.setHealth(Double.parseDouble(result));
                 }
                 result = rs.getString("food");
-                if (!(result == null)) {
+                if (result != null) {
                     player.setFoodLevel(Integer.parseInt(result));
+                }
+                result = rs.getString("exp");
+                if (result != null) {
+                    player.setLevel(Integer.parseInt(result));
                 }
                 result = rs.getString("enderchest");
                 InventoryManager.loadEChest(result, player);
+                player.sendMessage(ConfigManager.getColoredString("messages.loads"));
             }
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {
@@ -90,6 +96,7 @@ public class ManageData {
             } else {
                 ex.printStackTrace();
                 Main.main.getLogger().warning("Something went wrong with loading a Player!");
+                player.sendMessage(ConfigManager.getColoredString("messages.error"));
             }
         }
     }
@@ -99,18 +106,19 @@ public class ManageData {
             MySQL.connectMySQL();
         }
         try {
-            PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE playerdata AS p SET p.player_name = ?, p.inventory = ?, p.gamemode = ?, p.health = ?, p.food = ?, p.enderchest = ?, p.last_joined = ? WHERE p.player_uuid = ?");
+            PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE playerdata AS p SET p.player_name = ?, p.inventory = ?, p.gamemode = ?, p.health = ?, p.food = ?, p.enderchest = ?, exp = ?, p.last_joined = ? WHERE p.player_uuid = ?");
             ps.setString(1, player.getName());
             ps.setString(2, invBase64);
             ps.setString(3, String.valueOf(player.getGameMode()));
             ps.setInt(4, (int) player.getHealth());
             ps.setInt(5, player.getFoodLevel());
             ps.setString(6, ecBase64);
+            ps.setInt(7, (int) player.getLevel());
             java.util.Date dNow = new Date( );
             SimpleDateFormat ft =
                     new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
-            ps.setString(7, ft.format(dNow));
-            ps.setString(8, String.valueOf(player.getUniqueId()));
+            ps.setString(8, ft.format(dNow));
+            ps.setString(9, String.valueOf(player.getUniqueId()));
             ps.executeUpdate();
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {

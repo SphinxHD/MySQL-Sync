@@ -2,6 +2,7 @@ package hd.sphinx.sync.listener;
 
 import hd.sphinx.sync.Main;
 import hd.sphinx.sync.mysql.ManageData;
+import hd.sphinx.sync.util.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,17 +15,17 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (!ManageData.isPlayerInDB(p)) {
-            p.sendMessage("Generating your Profile.");
+            p.sendMessage(ConfigManager.getColoredString("messages.generated"));
             ManageData.generatePlayer(p);
         }
-        p.sendMessage("Loading your Profile.");
+        p.sendMessage(ConfigManager.getColoredString("messages.loading"));
         p.getEnderChest().clear();
         p.getInventory().clear();
+        p.setLevel(0);
         Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
             @Override
             public void run() {
                 ManageData.loadPlayer(p);
-                p.sendMessage("Your Profile was loaded.");
             }
         }, 40l);
     }

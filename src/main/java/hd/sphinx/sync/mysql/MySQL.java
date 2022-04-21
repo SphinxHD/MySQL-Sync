@@ -1,16 +1,17 @@
 package hd.sphinx.sync.mysql;
 
 import hd.sphinx.sync.Main;
+import hd.sphinx.sync.util.ConfigManager;
 
 import java.sql.*;
 
 public class MySQL {
 
-    public static String host = "localhost";
-    public static String port = "3306";
-    public static String database = "db";
-    public static String username = "root";
-    public static String password = "";
+    public static String host = ConfigManager.getString("mysql.host");
+    public static String port = ConfigManager.getString("mysql.port");
+    public static String database = ConfigManager.getString("mysql.database");
+    public static String username = ConfigManager.getString("mysql.username");
+    public static String password = ConfigManager.getString("mysql.password");
     public static Connection con;
 
     // Connect to Database
@@ -52,7 +53,7 @@ public class MySQL {
         PreparedStatement ps = con.prepareStatement("SHOW TABLES LIKE 'playerdata'");
         ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, gamemode VARCHAR(18), health INT(10), food INT(10), potions TEXT, enderchest TEXT, last_joined VARCHAR(255), PRIMARY KEY (player_uuid))");
+            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, gamemode VARCHAR(18), health INT(10), food INT(10), enderchest TEXT, exp INT(255), last_joined VARCHAR(255), PRIMARY KEY (player_uuid))");
             ps1.executeUpdate();
         }
     }

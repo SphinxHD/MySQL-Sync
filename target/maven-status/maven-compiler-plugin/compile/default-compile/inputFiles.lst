@@ -1,6 +1,7 @@
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\util\BukkitSerialization.java
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\mysql\ManageData.java
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\util\InventoryManager.java
+G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\util\ConfigManager.java
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\listener\JoinListener.java
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\listener\QuitListener.java
 G:\Source\MySQL-Sync\src\main\java\hd\sphinx\sync\Main.java

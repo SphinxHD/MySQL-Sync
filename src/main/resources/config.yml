@@ -1,0 +1,32 @@
+#########################################
+#                                       #
+#     Config from MySQL-Sync Plugin     #
+#        Coded by Leo Schneider         #
+#                                       #
+#########################################
+#
+# Messages
+# - You can use & as color code here and &n fo a new Line.
+# - You can also use %prefix% for the Prefix.
+#
+
+messages:
+  prefix: "&7[&cSync&7]&f"
+  generated: "%prefix% Your Account was generated."
+  loading: "%prefix% We are loading your Data... &7Please wait."
+  loads: "%prefix% We loaded your Data, you can now play."
+  error: "%prefix% &cThere was an error while loading your Data! Please contact a Admin."
+
+
+#
+# MySQL
+# - You will NEED to enter your MySQL credentials here, so the Plugin can connect to the MySQL.
+# - A MySQL is NEEDED to be used otherwise you cannot use this Plugin!
+#
+
+mysql:
+  host: "localhost"
+  port: "3306"
+  database: "db"
+  username: "root"
+  password: ""

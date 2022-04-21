@@ -9,10 +9,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
     public static Main main;
+    public static Logger logger;
 
     public void registerListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
@@ -33,6 +35,10 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         main = this;
+        logger = this.getLogger();
+
+        saveDefaultConfig();
+
         registerListener();
         registerMySQL();
 

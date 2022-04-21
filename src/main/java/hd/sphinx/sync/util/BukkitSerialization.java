@@ -1,5 +1,6 @@
 package hd.sphinx.sync.util;
 
+import org.bukkit.Effect;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
