@@ -2,6 +2,7 @@ package hd.sphinx.sync;
 
 import hd.sphinx.sync.listener.*;
 import hd.sphinx.sync.mysql.MySQL;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -36,6 +37,8 @@ public class Main extends JavaPlugin {
         // Plugin startup logic
         main = this;
         logger = this.getLogger();
+
+        Metrics metrics = new Metrics(this, 15003);
 
         saveDefaultConfig();
 
