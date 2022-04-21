@@ -1,5 +1,7 @@
 package hd.sphinx.sync.listener;
 
+import hd.sphinx.sync.mysql.ManageData;
+import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.InventoryManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +13,6 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        InventoryManager.saveItem(p, 0);
+        ManageData.savePlayer(p, InventoryManager.saveItems(p, p.getInventory()), InventoryManager.saveEChest(p));
     }
 }

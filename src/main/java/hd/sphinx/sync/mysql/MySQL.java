@@ -8,7 +8,7 @@ public class MySQL {
 
     public static String host = "localhost";
     public static String port = "3306";
-    public static String database = "test";
+    public static String database = "db";
     public static String username = "root";
     public static String password = "";
     public static Connection con;
@@ -37,12 +37,22 @@ public class MySQL {
         }
     }
 
+    // Reconnect to Database
+    public static void reconnectMySQL() {
+        try {
+            con.close();
+            con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     // Setting up the Database
     public static void registerMySQL() throws SQLException {
         PreparedStatement ps = con.prepareStatement("SHOW TABLES LIKE 'playerdata'");
         ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, last_joined VARCHAR(255), PRIMARY KEY (player_uuid))");
+            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, gamemode VARCHAR(18), health INT(10), food INT(10), potions TEXT, enderchest TEXT, last_joined VARCHAR(255), PRIMARY KEY (player_uuid))");
             ps1.executeUpdate();
         }
     }

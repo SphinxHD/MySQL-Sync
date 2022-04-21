@@ -1,31 +1,69 @@
 package hd.sphinx.sync.util;
 
-import hd.sphinx.sync.mysql.ManageData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public class InventoryManager {
 
-    public static void saveItem(@NotNull Player player, @NotNull Integer slot) {
-        ItemStack[] items = new ItemStack[1];
-        items[0] = player.getInventory().getItem(slot);
-        ManageData.savePlayer(player, BukkitSerialization.itemStackArrayToBase64(items));
+    public static String saveItems(@NotNull Player player, @NotNull PlayerInventory playerInventory) {
+        ItemStack[] items = new ItemStack[41];
+        int i = 0;
+        while (i <= 40) {
+            items[i] = playerInventory.getItem(i);
+            i++;
+        }
+        return BukkitSerialization.itemStackArrayToBase64(items);
     }
 
-    public static void loadItem(@NotNull Player player, @NotNull Integer slot) {
+    public static void loadItem(@NotNull String base64, @NotNull Player player) {
         ItemStack[] items = new ItemStack[0];
         try {
-            items = BukkitSerialization.itemStackArrayFromBase64(ManageData.loadPlayer(player));
+            items = BukkitSerialization.itemStackArrayFromBase64(base64);
+            if (items == null) return;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.getInventory().setItem(slot, items[0]);
+        int i = 0;
+        while (i <= 40) {
+            if (!(items[i] == null)) {
+                player.getInventory().setItem(i, items[i]);
+            } else {
+                player.getInventory().setItem(i, null);
+            }
+            i++;
+        }
     }
 
-    public static void generatePlayer(@NotNull Player player) {
-        ManageData.generatePlayer(player);
+    public static String saveEChest(@NotNull Player player) {
+        ItemStack[] items = new ItemStack[27];
+        int i = 0;
+        while (i <= 26) {
+            items[i] = player.getEnderChest().getItem(i);
+            i++;
+        }
+        return BukkitSerialization.itemStackArrayToBase64(items);
+    }
+
+    public static void loadEChest(@NotNull String base64, @NotNull Player player) {
+        ItemStack[] items = new ItemStack[0];
+        try {
+            items = BukkitSerialization.itemStackArrayFromBase64(base64);
+            if (items == null) return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int i = 0;
+        while (i <= 26) {
+            if (items[i] != null) {
+                player.getEnderChest().setItem(i, items[i]);
+            } else {
+                player.getEnderChest().setItem(i, null);
+            }
+            i++;
+        }
     }
 }

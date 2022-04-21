@@ -1,7 +1,6 @@
 package hd.sphinx.sync.util;
 
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -9,6 +8,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 public class BukkitSerialization {
 
@@ -28,7 +28,7 @@ public class BukkitSerialization {
 
             for (ItemStack item : items) {
                 if (item != null) {
-                    dataOutput.writeObject(item.serializeAsBytes());
+                    dataOutput.writeObject(item.serialize());
                 } else {
                     dataOutput.writeObject(null);
                 }
@@ -50,15 +50,16 @@ public class BukkitSerialization {
      */
     public static ItemStack[] itemStackArrayFromBase64(String data) throws IOException {
         try {
+            if (data == null) return null;
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
             BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
             ItemStack[] items = new ItemStack[dataInput.readInt()];
 
             for (int Index = 0; Index < items.length; Index++) {
-                byte[] stack = (byte[]) dataInput.readObject();
+                Map<String, Object> stack = (Map<String, Object>) dataInput.readObject();
 
                 if (stack != null) {
-                    items[Index] = ItemStack.deserializeBytes(stack);
+                    items[Index] = ItemStack.deserialize(stack);
                 } else {
                     items[Index] = null;
                 }
