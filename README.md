@@ -2,4 +2,4 @@
 Syncs Player Data between Servers
 
 # IMPORTANT
-Please don't use it! At the moment this is not working and only corrupting some Files.
+Use at your own risk! It will funktion but has many Bugs at the Moment.
