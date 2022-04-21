@@ -6,7 +6,7 @@
 
     <groupId>MySQL-Sync</groupId>
     <artifactId>MySQL-Sync</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>MySQL-Sync</name>
@@ -46,10 +46,6 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>C:\Users\leo\Desktop\TestServer\plugins\Project-Herovitafisch-1.0.0.jar</outputFile>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -89,7 +85,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>2.2.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -1,5 +1,5 @@
 name: MySQL-Sync
-version: 1.0.0
+version: 1.0.1
 main: hd.sphinx.sync.Main
 api-version: 1.17
 authors: [ Sphinx_HD ]
