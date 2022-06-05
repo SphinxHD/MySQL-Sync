@@ -2,6 +2,7 @@ package hd.sphinx.sync;
 
 import hd.sphinx.sync.listener.*;
 import hd.sphinx.sync.mysql.MySQL;
+import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.ConfigUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -44,6 +45,8 @@ public class Main extends JavaPlugin {
 
         ConfigUpdater.checkForUpdate();
         saveDefaultConfig();
+        ConfigManager.reload();
+
 
         registerListener();
         registerMySQL();

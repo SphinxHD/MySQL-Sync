@@ -6,6 +6,7 @@ import hd.sphinx.sync.util.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import sun.security.krb5.Config;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,6 +55,9 @@ public class ManageData {
             } else {
                 ex.printStackTrace();
                 Main.main.getLogger().warning("Something went wrong with registering a Player!");
+                if (ConfigManager.getBoolean("settings.sending.error")) {
+                    player.sendMessage(ConfigManager.getColoredString("messages.error"));
+                }
             }
         }
     }
@@ -88,7 +92,7 @@ public class ManageData {
                 }
                 result = rs.getString("enderchest");
                 InventoryManager.loadEChest(result, player);
-                player.sendMessage(ConfigManager.getColoredString("messages.loads"));
+                player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
             }
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {
@@ -96,7 +100,9 @@ public class ManageData {
             } else {
                 ex.printStackTrace();
                 Main.main.getLogger().warning("Something went wrong with loading a Player!");
-                player.sendMessage(ConfigManager.getColoredString("messages.error"));
+                if (ConfigManager.getBoolean("settings.sending.error")) {
+                    player.sendMessage(ConfigManager.getColoredString("messages.error"));
+                }
             }
         }
     }
@@ -106,19 +112,48 @@ public class ManageData {
             MySQL.connectMySQL();
         }
         try {
-            PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE playerdata AS p SET p.player_name = ?, p.inventory = ?, p.gamemode = ?, p.health = ?, p.food = ?, p.enderchest = ?, exp = ?, p.last_joined = ? WHERE p.player_uuid = ?");
+            String statement = "UPDATE playerdata AS p SET p.player_name = ?, p.last_joined = ?";
+            if (ConfigManager.getBoolean("settings.syncing.inventory")) {
+                statement = statement + ", p.inventory = ?";
+            } else if (ConfigManager.getBoolean("settings.syncing.gamemode")) {
+                statement = statement + ", p.gamemode = ?";
+            } else if (ConfigManager.getBoolean("settings.syncing.health")) {
+                statement = statement + ", p.health = ?";
+            } else if (ConfigManager.getBoolean("settings.syncing.hunger")) {
+                statement = statement + ", p.food = ?";
+            } else if (ConfigManager.getBoolean("settings.syncing.enderchest")) {
+                statement = statement + ", p.enderchest = ?";
+            } else if (ConfigManager.getBoolean("settings.syncing.exp")) {
+                statement = statement + ", p.exp = ?";
+            }
+            statement = statement + " WHERE p.player_uuid = ?";
+            PreparedStatement ps = MySQL.getConnection().prepareStatement(statement);
             ps.setString(1, player.getName());
-            ps.setString(2, invBase64);
-            ps.setString(3, String.valueOf(player.getGameMode()));
-            ps.setInt(4, (int) player.getHealth());
-            ps.setInt(5, player.getFoodLevel());
-            ps.setString(6, ecBase64);
-            ps.setInt(7, (int) player.getLevel());
-            java.util.Date dNow = new Date( );
+            Date dNow = new Date( );
             SimpleDateFormat ft =
                     new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
-            ps.setString(8, ft.format(dNow));
-            ps.setString(9, String.valueOf(player.getUniqueId()));
+            ps.setString(2, ft.format(dNow));
+
+            String[] args = statement.split(",");
+
+            int real = 1;
+            for (String str : args) {
+                if (str.contains("inventory")) {
+                    ps.setString(real, invBase64);
+                } else if (str.contains("gamemode")) {
+                    ps.setString(real, String.valueOf(player.getGameMode()));
+                } else if (str.contains("health")) {
+                    ps.setInt(real, (int) player.getHealth());
+                } else if (str.contains("food")) {
+                    ps.setInt(real, player.getFoodLevel());
+                } else if (str.contains("enderchest")) {
+                    ps.setString(real, ecBase64);
+                } else if (str.contains("exp")) {
+                    ps.setInt(real, player.getLevel());
+                }
+                real++;
+            }
+            ps.setString(real, String.valueOf(player.getUniqueId()));
             ps.executeUpdate();
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {
@@ -132,6 +167,9 @@ public class ManageData {
             } else {
                 ex.printStackTrace();
                 Main.main.getLogger().warning("Something went wrong with saving a Player!");
+                if (ConfigManager.getBoolean("settings.sending.error")) {
+                    player.sendMessage(ConfigManager.getColoredString("messages.error"));
+                }
             }
         }
     }

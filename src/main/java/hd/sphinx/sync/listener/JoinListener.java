@@ -15,7 +15,9 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (!ManageData.isPlayerInDB(p)) {
-            p.sendMessage(ConfigManager.getColoredString("messages.generated"));
+            if (ConfigManager.getBoolean("settings.sending.generated")) {
+                p.sendMessage(ConfigManager.getColoredString("messages.generated"));
+            }
             ManageData.generatePlayer(p);
         }
         p.sendMessage(ConfigManager.getColoredString("messages.loading"));

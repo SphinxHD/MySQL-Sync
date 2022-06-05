@@ -11,6 +11,9 @@ public class MainCommand implements CommandExecutor {
         if (ConfigManager.getBoolean("settings.use-permission") && !sender.hasPermission("sync.command")) {
             sender.sendMessage(ConfigManager.getColoredString("messages.lacking-permission").replaceAll("%permission%", "sync.command"));
             return true;
+        } else if (args.length != 1) {
+            sender.sendMessage(ConfigManager.getColoredString("messages.help"));
+            return true;
         } else if (args[0].equalsIgnoreCase("version")) {
             sender.sendMessage(ConfigManager.getColoredString("messages.version"));
             return true;
@@ -22,7 +25,7 @@ public class MainCommand implements CommandExecutor {
                 sender.sendMessage(ConfigManager.getColoredString("messages.lacking-permission").replaceAll("%permission%", "sync.reload"));
                 return true;
             }
-            Main.main.saveDefaultConfig();
+            ConfigManager.reload();
             sender.sendMessage(ConfigManager.getColoredString("messages.reload"));
             return true;
         }
