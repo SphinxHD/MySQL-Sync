@@ -4,3 +4,7 @@ main: hd.sphinx.sync.Main
 api-version: 1.17
 authors: [ Sphinx_HD ]
 description: Syncs Player Data between Servers
+commands:
+  sync:
+    description: Sync Command
+    usage: /sync <args>

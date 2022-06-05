@@ -5,17 +5,44 @@
 #                                       #
 #########################################
 #
+# NOTICE:
+# - For /sync reload you will need to set the Player the following Permission "sync.reload"
+#
+# Settings
+# - Everything is described.
+#
+
+settings:
+  syncing:
+    inventory: true # Syncing Inventory between the Servers
+    enderchest: true # Syncing EnderChest between the Servers
+    exp: true # Syncing EXP between the Servers
+    gamemode: true # Syncing GameMode between the Servers
+    hunger: true # Syncing Hunger between the Servers
+    health: true # Syncing Health between the Servers
+  sending:
+    generated: true # Sending generated Message to Player
+    error: true # Sending Error Message to the Player
+  use-permission: false # You will need to set the Player the following Permission for the /sync command: "sync.command" (Players still need "sync.reload" to reload the Config)
+
+
+#
 # Messages
 # - You can use & as color code here and &n fo a new Line.
 # - You can also use %prefix% for the Prefix.
 #
 
 messages:
-  prefix: "&7[&cSync&7]&f"
-  generated: "%prefix% Your Account was generated."
-  loading: "%prefix% We are loading your Data... &7Please wait."
-  loads: "%prefix% We loaded your Data, you can now play."
-  error: "%prefix% &cThere was an error while loading your Data! Please contact a Admin."
+  prefix: "&7[&cSync&7]&f" # Prefix of all Messages
+  generated: "%prefix% Your Account was generated." # Message when Player Account in Database was generated
+  loading: "%prefix% We are loading your Data... &7Please wait." # Message for loading the Player Account from the Database
+  loaded: "%prefix% We loaded your Data, you can now play." # Message when Player Account was loaded from Database
+  error: "%prefix% &cThere was an error while loading your Data! Please contact a Admin." # Error while loading the Player Account from Database
+  reloaded: "%prefix% Reloaded the Config" # The Config was reloaded
+  help: "%prefix% &e/sync <args> &8- &fYou can use &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload&f." # Help Message for Main Command
+  version: "%prefix% The Version you are using is &e${project.version}&f." # Version of the Plugin
+  reload: "%prefix% &eThe Config was reloaded!" # Config reload Message
+  lacking-permission: "%prefix% &cYou are lacking the Permission &e%permission%&c!" # Lacking Permission Message (%permission% can be used here)
 
 
 #
@@ -30,3 +57,11 @@ mysql:
   database: "db"
   username: "root"
   password: ""
+
+
+#
+# Version
+# - This is needed for Updating the Plugin right, so don't remove or edit it!
+#
+
+version: ${project.version}

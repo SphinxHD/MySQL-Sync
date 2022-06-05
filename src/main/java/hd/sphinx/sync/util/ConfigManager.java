@@ -11,4 +11,8 @@ public class ConfigManager {
     public static String getColoredString(String path) {
         return getString(path).replaceAll("%prefix%", getString("messages.prefix")).replaceAll("&", "§").replaceAll("&n", "\n");
     }
+
+    public static Boolean getBoolean(String path) {
+        return Main.main.getConfig().getBoolean(path);
+    }
 }
