@@ -27,7 +27,6 @@ public class AdvancementManager {
         while (advancements.hasNext()) {
             Advancement a = advancements.next();
             if (a.getKey().toString().equalsIgnoreCase(name)) {
-                System.out.println(a);
                 return a;
             }
         }
