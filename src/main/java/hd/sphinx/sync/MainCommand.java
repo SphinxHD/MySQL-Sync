@@ -1,9 +1,12 @@
 package hd.sphinx.sync;
 
+import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.ConfigManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.sql.SQLException;
 
 public class MainCommand implements CommandExecutor {
 
@@ -26,6 +29,13 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
             ConfigManager.reload();
+            MySQL.disconnectMySQL();
+            MySQL.connectMySQL();
+            try {
+                MySQL.registerMySQL();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             sender.sendMessage(ConfigManager.getColoredString("messages.reload"));
             return true;
         }

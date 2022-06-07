@@ -3,7 +3,7 @@ package hd.sphinx.sync;
 import hd.sphinx.sync.listener.*;
 import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.ConfigManager;
-import hd.sphinx.sync.util.ConfigUpdater;
+import hd.sphinx.sync.util.Updater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -43,15 +43,15 @@ public class Main extends JavaPlugin {
 
         Metrics metrics = new Metrics(this, 15003);
 
-        ConfigUpdater.checkForUpdate();
+        Updater.checkForUpdate();
         saveDefaultConfig();
         ConfigManager.reload();
 
 
         registerListener();
         registerMySQL();
+        Updater.checkForMySQLUpdate();
         Bukkit.getPluginCommand("sync").setExecutor((CommandExecutor) new MainCommand());
-
     }
 
     @Override

@@ -1,17 +1,23 @@
 package hd.sphinx.sync.mysql;
 
 import hd.sphinx.sync.Main;
+import hd.sphinx.sync.util.AdvancementManager;
+import hd.sphinx.sync.util.BukkitSerialization;
 import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-import sun.security.krb5.Config;
+import org.bukkit.potion.PotionEffect;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 public class ManageData {
@@ -73,7 +79,9 @@ public class ManageData {
             String result = "null";
             if (rs.next()) {
                 result = rs.getString("inventory");
-                InventoryManager.loadItem(result, player);
+                if (result != null) {
+                    InventoryManager.loadItem(result, player);
+                }
                 result = rs.getString("gamemode");
                 if (result != null) {
                     player.setGameMode(GameMode.valueOf(result));
@@ -91,7 +99,23 @@ public class ManageData {
                     player.setLevel(Integer.parseInt(result));
                 }
                 result = rs.getString("enderchest");
-                InventoryManager.loadEChest(result, player);
+                if (result != null) {
+                    InventoryManager.loadEChest(result, player);
+                }
+                result = rs.getString("effects");
+                if (result != null) {
+                    Collection<PotionEffect> collection = null;
+                    try {
+                        collection = Arrays.asList(BukkitSerialization.potionEffectArrayFromBase64(result));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    player.addPotionEffects(collection);
+                }
+                result = rs.getString("advancements");
+                if (result != null) {
+                    AdvancementManager.loadPlayerAdvancements(player, result);
+                }
                 player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
             }
         } catch (SQLException ex) {
@@ -115,16 +139,27 @@ public class ManageData {
             String statement = "UPDATE playerdata AS p SET p.player_name = ?, p.last_joined = ?";
             if (ConfigManager.getBoolean("settings.syncing.inventory")) {
                 statement = statement + ", p.inventory = ?";
-            } else if (ConfigManager.getBoolean("settings.syncing.gamemode")) {
+            }
+            if (ConfigManager.getBoolean("settings.syncing.gamemode")) {
                 statement = statement + ", p.gamemode = ?";
-            } else if (ConfigManager.getBoolean("settings.syncing.health")) {
+            }
+            if (ConfigManager.getBoolean("settings.syncing.health")) {
                 statement = statement + ", p.health = ?";
-            } else if (ConfigManager.getBoolean("settings.syncing.hunger")) {
+            }
+            if (ConfigManager.getBoolean("settings.syncing.hunger")) {
                 statement = statement + ", p.food = ?";
-            } else if (ConfigManager.getBoolean("settings.syncing.enderchest")) {
+            }
+            if (ConfigManager.getBoolean("settings.syncing.enderchest")) {
                 statement = statement + ", p.enderchest = ?";
-            } else if (ConfigManager.getBoolean("settings.syncing.exp")) {
+            }
+            if (ConfigManager.getBoolean("settings.syncing.exp")) {
                 statement = statement + ", p.exp = ?";
+            }
+            if (ConfigManager.getBoolean("settings.syncing.effects")) {
+                statement = statement + ", p.effects = ?";
+            }
+            if (ConfigManager.getBoolean("settings.syncing.advancements")) {
+                statement = statement + ", p.advancements = ?";
             }
             statement = statement + " WHERE p.player_uuid = ?";
             PreparedStatement ps = MySQL.getConnection().prepareStatement(statement);
@@ -150,6 +185,12 @@ public class ManageData {
                     ps.setString(real, ecBase64);
                 } else if (str.contains("exp")) {
                     ps.setInt(real, player.getLevel());
+                } else if (str.contains("effects")) {
+                    Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
+                    PotionEffect[] effectArray = new ArrayList<PotionEffect>(effectCollection).toArray(new PotionEffect[0]);
+                    ps.setString(real, BukkitSerialization.potionEffectArrayToBase64(effectArray));
+                } else if (str.contains("advancements")) {
+                    ps.setString(real, BukkitSerialization.advancementBooleanHashMapToBase64(AdvancementManager.getAdvancementMap(player)));
                 }
                 real++;
             }

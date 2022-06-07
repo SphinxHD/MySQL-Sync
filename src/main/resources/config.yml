@@ -20,6 +20,8 @@ settings:
     gamemode: true # Syncing GameMode between the Servers
     hunger: true # Syncing Hunger between the Servers
     health: true # Syncing Health between the Servers
+    effects: true # Syncing Potion Effects between the Servers
+    advancements: false # Syncing ALL Advancements between the Servers (This requires a large MySQL because Minecraft Advancements are giant!)
   sending:
     generated: true # Sending generated Message to Player
     error: true # Sending Error Message to the Player
@@ -38,7 +40,6 @@ messages:
   loading: "%prefix% We are loading your Data... &7Please wait." # Message for loading the Player Account from the Database
   loaded: "%prefix% We loaded your Data, you can now play." # Message when Player Account was loaded from Database
   error: "%prefix% &cThere was an error while loading your Data! Please contact a Admin." # Error while loading the Player Account from Database
-  reloaded: "%prefix% Reloaded the Config" # The Config was reloaded
   help: "%prefix% &e/sync <args> &8- &fYou can use &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload&f." # Help Message for Main Command
   version: "%prefix% The Version you are using is &e${project.version}&f." # Version of the Plugin
   reload: "%prefix% &eThe Config was reloaded!" # Config reload Message

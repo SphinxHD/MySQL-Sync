@@ -53,7 +53,7 @@ public class MySQL {
         PreparedStatement ps = con.prepareStatement("SHOW TABLES LIKE 'playerdata'");
         ResultSet rs = ps.executeQuery();
         if (!rs.next()) {
-            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, gamemode VARCHAR(18), health INT(10), food INT(10), enderchest TEXT, exp INT(255), last_joined VARCHAR(255), PRIMARY KEY (player_uuid))");
+            PreparedStatement ps1 = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerdata (player_uuid VARCHAR(100) NOT NULL, player_name VARCHAR(16), inventory TEXT, gamemode VARCHAR(18), health INT(10), food INT(10), enderchest TEXT, exp INT(255), last_joined VARCHAR(255), effects LONGTEXT, advancements LONGTEXT, PRIMARY KEY (player_uuid))");
             ps1.executeUpdate();
         }
     }
