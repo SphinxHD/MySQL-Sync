@@ -10,7 +10,6 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +20,8 @@ import java.util.Collection;
 import java.util.Date;
 
 public class ManageData {
+
+    public static ArrayList<Player> loadInventory = new ArrayList<Player>();
 
     public static Boolean isPlayerInDB(Player player) {
         if (!MySQL.isConnected()) {
@@ -40,6 +41,7 @@ public class ManageData {
         if (!MySQL.isConnected()) {
             MySQL.connectMySQL();
         }
+        if (isPlayerInDB(player)) return;
         try {
             PreparedStatement ps = MySQL.getConnection().prepareStatement("INSERT INTO playerdata (player_uuid, player_name, last_joined) VALUES(?,?,?)");
             ps.setString(1, String.valueOf(player.getUniqueId()));
@@ -49,7 +51,7 @@ public class ManageData {
                     new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
             ps.setString(3, ft.format(dNow));
             ps.executeUpdate();
-        } catch (SQLException ex) {
+        } catch (SQLException exception) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
@@ -59,7 +61,7 @@ public class ManageData {
                     }
                 }, 20);
             } else {
-                ex.printStackTrace();
+                exception.printStackTrace();
                 Main.main.getLogger().warning("Something went wrong with registering a Player!");
                 if (ConfigManager.getBoolean("settings.sending.error")) {
                     player.sendMessage(ConfigManager.getColoredString("messages.error"));
@@ -79,45 +81,63 @@ public class ManageData {
             String result = "null";
             if (rs.next()) {
                 result = rs.getString("inventory");
-                if (result != null) {
-                    InventoryManager.loadItem(result, player);
-                }
-                result = rs.getString("gamemode");
-                if (result != null) {
-                    player.setGameMode(GameMode.valueOf(result));
-                }
-                result = rs.getString("health");
-                if (result != null) {
-                    player.setHealth(Double.parseDouble(result));
-                }
-                result = rs.getString("food");
-                if (result != null) {
-                    player.setFoodLevel(Integer.parseInt(result));
-                }
-                result = rs.getString("exp");
-                if (result != null) {
-                    player.setLevel(Integer.parseInt(result));
-                }
-                result = rs.getString("enderchest");
-                if (result != null) {
-                    InventoryManager.loadEChest(result, player);
-                }
-                result = rs.getString("effects");
-                if (result != null) {
-                    Collection<PotionEffect> collection = null;
-                    try {
-                        collection = Arrays.asList(BukkitSerialization.potionEffectArrayFromBase64(result));
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                try {
+                    if (result != null) {
+                        InventoryManager.loadItem(result, player);
                     }
-                    player.addPotionEffects(collection);
-                }
+                } catch (Exception ignored) { }
+                result = rs.getString("gamemode");
+                try {
+                    if (result != null) {
+                        player.setGameMode(GameMode.valueOf(result));
+                    }
+                } catch (Exception ignored) { }
+                result = rs.getString("health");
+                try {
+                    if (result != null) {
+                        player.setHealth(Double.parseDouble(result));
+                    }
+                } catch (Exception ignored) { }
+                result = rs.getString("food");
+                try {
+                    if (result != null) {
+                        player.setFoodLevel(Integer.parseInt(result));
+                    }
+                } catch (Exception ignored) { }
+                result = rs.getString("exp");
+                try {
+                    if (result != null) {
+                        player.setLevel(Integer.parseInt(result));
+                    }
+                } catch (Exception ignored) { }
+                result = rs.getString("enderchest");
+                try {
+                    if (result != null) {
+                        InventoryManager.loadEChest(result, player);
+                    }
+                } catch (Exception ignored) { }
+                result = rs.getString("effects");
+                try {
+                    if (result != null) {
+                        Collection<PotionEffect> collection = null;
+                        collection = Arrays.asList(BukkitSerialization.potionEffectArrayFromBase64(result));
+                        player.addPotionEffects(collection);
+                    }
+                } catch (Exception ignored) { }
                 result = rs.getString("advancements");
-                if (result != null) {
-                    AdvancementManager.loadPlayerAdvancements(player, result);
-                }
+                try {
+                    if (result != null) {
+                        AdvancementManager.loadPlayerAdvancements(player, result);
+                    }
+                } catch (Exception ignored) { }
                 player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
             }
+            Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    loadInventory.remove(player);
+                }
+            }, 5l);
         } catch (SQLException ex) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
@@ -132,6 +152,7 @@ public class ManageData {
     }
 
     public static void savePlayer(Player player, String invBase64, String ecBase64) {
+        if (loadInventory.contains(player)) return;
         if (!MySQL.isConnected()) {
             MySQL.connectMySQL();
         }
