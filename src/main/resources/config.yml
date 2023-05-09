@@ -22,6 +22,7 @@ settings:
     health: true # Syncing Health between the Servers
     effects: true # Syncing Potion Effects between the Servers
     advancements: false # Syncing ALL Advancements between the Servers (This requires a large MySQL because Minecraft Advancements are giant!)
+    statistics: false # Syncing ALL Statistics between the Servers (This requires a large MySQL because Minecraft Statistics are way bigger than the Advancements, and even they are giant!)
   sending:
     generated: true # Sending generated Message to Player
     error: true # Sending Error Message to the Player
