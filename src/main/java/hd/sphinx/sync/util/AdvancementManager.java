@@ -37,8 +37,8 @@ public class AdvancementManager {
         HashMap<Advancement, Boolean> advancements = null;
         try {
             advancements = BukkitSerialization.advancementBooleanHashMapFromBase64(base64);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
 
         for (Advancement advancement : advancements.keySet()) {

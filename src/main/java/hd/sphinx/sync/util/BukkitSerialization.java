@@ -203,5 +203,58 @@ public class BukkitSerialization {
         }
     }
 
+    /**
+     * A method to serialize an {@link String} and {@link Integer} HashMap to Base64 String.
+     *
+     * @param statistics to turn into a Base64 String.
+     * @return Base64 string of the advancements and booleans.
+     * @throws IllegalStateException
+     */
+    public static String statisticsIntegerHashMapToBase64(HashMap<String, Integer> statistics) throws IllegalStateException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
 
+            dataOutput.writeInt(statistics.size());
+
+            for (String statistic : statistics.keySet()) {
+                dataOutput.writeObject(statistic + ";"
+                        + statistics.get(statistic));
+            }
+
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save statistics.", e);
+        }
+    }
+
+    /**
+     * Gets an HashMap out of Strings and Integers from Base64 string.
+     *
+     * @param data Base64 string to convert to HashMap out of Strings and Integers.
+     * @return HashMap out of Strings and Integers created from the Base64 string.
+     * @throws IOException
+     */
+    public static HashMap<String, Integer> statisticsIntegerHashMapFromBase64(String data) throws IOException {
+        try {
+            if (data == null) return null;
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            HashMap<String, Integer> statistics = new HashMap<String, Integer>();
+            int InputInt = dataInput.readInt();
+
+            for (int Index = 0; Index < InputInt; Index++) {
+                String statistic = (String) dataInput.readObject();
+                String[] statisticArray = statistic.split(";");
+
+                statistics.put(statisticArray[0], Integer.valueOf(statisticArray[1]));
+            }
+
+            dataInput.close();
+            return statistics;
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Unable to decode class type.", e);
+        }
+    }
 }

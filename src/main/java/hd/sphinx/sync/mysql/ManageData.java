@@ -1,10 +1,7 @@
 package hd.sphinx.sync.mysql;
 
 import hd.sphinx.sync.Main;
-import hd.sphinx.sync.util.AdvancementManager;
-import hd.sphinx.sync.util.BukkitSerialization;
-import hd.sphinx.sync.util.ConfigManager;
-import hd.sphinx.sync.util.InventoryManager;
+import hd.sphinx.sync.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -130,6 +127,12 @@ public class ManageData {
                         AdvancementManager.loadPlayerAdvancements(player, result);
                     }
                 } catch (Exception ignored) { }
+                result = rs.getString("statistics");
+                try {
+                    if (result != null) {
+                        StatisticsManager.loadPlayerStatistics(player, result);
+                    }
+                } catch (Exception ignored) { }
                 player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
             }
             Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
@@ -182,6 +185,9 @@ public class ManageData {
             if (ConfigManager.getBoolean("settings.syncing.advancements")) {
                 statement = statement + ", p.advancements = ?";
             }
+            if (ConfigManager.getBoolean("settings.syncing.statistics")) {
+                statement = statement + ", p.statistics = ?";
+            }
             statement = statement + " WHERE p.player_uuid = ?";
             PreparedStatement ps = MySQL.getConnection().prepareStatement(statement);
             ps.setString(1, player.getName());
@@ -212,6 +218,8 @@ public class ManageData {
                     ps.setString(real, BukkitSerialization.potionEffectArrayToBase64(effectArray));
                 } else if (str.contains("advancements")) {
                     ps.setString(real, BukkitSerialization.advancementBooleanHashMapToBase64(AdvancementManager.getAdvancementMap(player)));
+                } else if (str.contains("statistics")) {
+                    ps.setString(real, BukkitSerialization.statisticsIntegerHashMapToBase64(StatisticsManager.getStatisticsMap(player)));
                 }
                 real++;
             }
