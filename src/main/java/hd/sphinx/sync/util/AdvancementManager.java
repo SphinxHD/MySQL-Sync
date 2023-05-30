@@ -33,7 +33,7 @@ public class AdvancementManager {
         return null;
     }
 
-    public static void loadPlayerAdvancements(Player player, String base64) {
+    public static HashMap<Advancement, Boolean> loadPlayerAdvancements(Player player, String base64) {
         HashMap<Advancement, Boolean> advancements = null;
         try {
             advancements = BukkitSerialization.advancementBooleanHashMapFromBase64(base64);
@@ -50,5 +50,6 @@ public class AdvancementManager {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement revoke " + player.getName() + " only " + advancement.getKey());
             }
         }
+        return advancements;
     }
 }

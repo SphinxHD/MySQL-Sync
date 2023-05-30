@@ -1,12 +1,9 @@
 package hd.sphinx.sync;
 
-import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.ConfigManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import java.sql.SQLException;
 
 public class MainCommand implements CommandExecutor {
 
@@ -18,10 +15,10 @@ public class MainCommand implements CommandExecutor {
             sender.sendMessage(ConfigManager.getColoredString("messages.help"));
             return true;
         } else if (args[0].equalsIgnoreCase("version")) {
-            sender.sendMessage(ConfigManager.getColoredString("messages.version"));
+            sender.sendMessage(ConfigManager.getColoredString("messages.version").replaceAll("%version%", ConfigManager.getString("version")));
             return true;
         } else if (args[0].equalsIgnoreCase("dev") || args[0].equalsIgnoreCase("developer")) {
-            sender.sendMessage(ConfigManager.getColoredString("messages.prefix") + " The Developer of this Plugin is §3Sphinx_HD§f.");
+            sender.sendMessage(ConfigManager.getColoredString("messages.developerFront") + "§3Sphinx_HD" + ConfigManager.getColoredString("messages.developerBack"));
             return true;
         } else if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("sync.reload")) {
@@ -29,13 +26,7 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
             ConfigManager.reload();
-            MySQL.disconnectMySQL();
-            MySQL.connectMySQL();
-            try {
-                MySQL.registerMySQL();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            MainManageData.reload();
             sender.sendMessage(ConfigManager.getColoredString("messages.reload"));
             return true;
         }

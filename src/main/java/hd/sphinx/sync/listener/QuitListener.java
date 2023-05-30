@@ -1,7 +1,6 @@
 package hd.sphinx.sync.listener;
 
-import hd.sphinx.sync.mysql.ManageData;
-import hd.sphinx.sync.util.InventoryManager;
+import hd.sphinx.sync.MainManageData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,10 +11,10 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (!ManageData.loadInventory.contains(player)) {
-            ManageData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
+        if (!MainManageData.loadedPlayerData.contains(player)) {
+            MainManageData.savePlayer(player);
         } else {
-            ManageData.loadInventory.remove(player);
+            MainManageData.loadedPlayerData.remove(player);
         }
     }
 }

@@ -57,7 +57,7 @@ public class StatisticsManager {
         return returnHashMap;
     }
 
-    public static void loadPlayerStatistics(Player player, String base64) {
+    public static HashMap<String, Integer> loadPlayerStatistics(Player player, String base64) {
         HashMap<String, Integer> statistics = null;
         try {
             statistics = BukkitSerialization.statisticsIntegerHashMapFromBase64(base64);
@@ -76,5 +76,6 @@ public class StatisticsManager {
                 player.setStatistic(Statistic.valueOf(statistic), statistics.get(statistic));
             }
         }
+        return statistics;
     }
 }

@@ -1,7 +1,6 @@
 package hd.sphinx.sync;
 
 import hd.sphinx.sync.listener.*;
-import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.Updater;
 import org.bstats.bukkit.Metrics;
@@ -12,7 +11,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -26,12 +32,16 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents((Listener) new QuitListener(), (Plugin) this);
     }
 
-    public void registerMySQL() {
-        MySQL.connectMySQL();
+    public Boolean isUpdateAvailable() {
         try {
-            MySQL.registerMySQL();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            URL url = new URL("https://raw.githubusercontent.com/SphinxHD/MySQL-Sync/main/newest-version");
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            String version = bufferedReader.readLine();
+            bufferedReader.close();
+            return version.equalsIgnoreCase(ConfigManager.getString("version"));
+        } catch (IOException ignored) {
+            return false;
         }
     }
 
@@ -47,17 +57,20 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         ConfigManager.reload();
 
-
         registerListener();
-        registerMySQL();
+        MainManageData.initialize();
         Updater.checkForMySQLUpdate();
         Bukkit.getPluginCommand("sync").setExecutor((CommandExecutor) new MainCommand());
+        Bukkit.getPluginCommand("sync").setTabCompleter(new MainCommandTabComplete());
+
+        if (!isUpdateAvailable()) {
+            logger.log(Level.WARNING, "MySQL Sync is not up to date. Please download the newest version on Spigot: https://www.spigotmc.org/resources/mysql-sync.101554/");
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        MySQL.disconnectMySQL();
-
+        MainManageData.shutdown();
     }
 }
