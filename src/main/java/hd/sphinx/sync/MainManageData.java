@@ -1,5 +1,6 @@
 package hd.sphinx.sync;
 
+import hd.sphinx.sync.listener.DeathListener;
 import hd.sphinx.sync.mongo.ManageMongoData;
 import hd.sphinx.sync.mongo.MongoDB;
 import hd.sphinx.sync.mysql.ManageMySQLData;
@@ -7,7 +8,9 @@ import hd.sphinx.sync.mysql.MySQL;
 import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.InventoryManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -104,6 +107,15 @@ public class MainManageData {
     }
 
     public static void savePlayer(Player player) {
+        if (DeathListener.deadPlayers.contains(player)) {
+            player.getInventory().clear();
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setLevel(0);
+        }
+        player.getInventory().addItem(player.getItemInHand());
+        System.out.println(player.getItemInHand());
+        player.setItemInHand(new ItemStack(Material.AIR));
         if (storageType == StorageType.MYSQL) {
             ManageMySQLData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
         } else if (storageType == StorageType.MONGODB) {
@@ -115,7 +127,7 @@ public class MainManageData {
 
         MYSQL,
         MONGODB,
-        CLOUD;
+        CLOUD; // For a future Update
 
     }
 }

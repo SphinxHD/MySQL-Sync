@@ -30,6 +30,7 @@ public class Main extends JavaPlugin {
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents((Listener) new JoinListener(), (Plugin) this);
         pluginManager.registerEvents((Listener) new QuitListener(), (Plugin) this);
+        pluginManager.registerEvents((Listener) new DeathListener(), (Plugin) this);
     }
 
     public Boolean isUpdateAvailable() {

@@ -28,6 +28,7 @@ settings:
   sending:
     generated: true # Sending generated Message to Player
     error: true # Sending Error Message to the Player
+  onlySyncPermission: false # Only Sync the Players Data with the permission "sync.sync"
   usePermission: false # You will need to set the Player the following Permission for the /sync command: "sync.command" (Players still need "sync.reload" to reload the Config)
   language: "en_EN" # Which language should be used, valid languages are at the moment, en_EN (English) and de_DE (German) or if you add a own language in the lang folder.
 

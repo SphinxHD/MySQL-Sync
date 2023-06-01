@@ -8,6 +8,7 @@ import hd.sphinx.sync.api.SyncProfile;
 import hd.sphinx.sync.api.SyncSettings;
 import hd.sphinx.sync.api.events.CompletedLoadingPlayerDataEvent;
 import hd.sphinx.sync.api.events.SavingPlayerDataEvent;
+import hd.sphinx.sync.listener.DeathListener;
 import hd.sphinx.sync.util.*;
 import org.bson.Document;
 import org.bukkit.Bukkit;
