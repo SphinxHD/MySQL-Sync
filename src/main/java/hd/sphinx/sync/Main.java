@@ -13,12 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -33,7 +30,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents((Listener) new DeathListener(), (Plugin) this);
     }
 
-    public Boolean isUpdateAvailable() {
+    public static Boolean isUpdateAvailable() {
         try {
             URL url = new URL("https://raw.githubusercontent.com/SphinxHD/MySQL-Sync/main/newest-version");
             URLConnection urlConnection = url.openConnection();
@@ -54,7 +51,6 @@ public class Main extends JavaPlugin {
 
         Metrics metrics = new Metrics(this, 15003);
 
-        Updater.checkForUpdate();
         saveDefaultConfig();
         ConfigManager.reload();
 
@@ -64,9 +60,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginCommand("sync").setExecutor((CommandExecutor) new MainCommand());
         Bukkit.getPluginCommand("sync").setTabCompleter(new MainCommandTabComplete());
 
-        if (!isUpdateAvailable()) {
-            logger.log(Level.WARNING, "MySQL Sync is not up to date. Please download the newest version on Spigot: https://www.spigotmc.org/resources/mysql-sync.101554/");
-        }
+        Updater.checkForUpdate();
     }
 
     @Override

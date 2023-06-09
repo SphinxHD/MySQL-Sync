@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class Updater {
 
@@ -90,9 +91,10 @@ public class Updater {
         try {
             cfg.save(file);
             langCfg.save(lang);
-         } catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        updateCompleted();
     }
 
     public static void updateONEONEtoONEFOUR() {
@@ -173,6 +175,7 @@ public class Updater {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        updateCompleted();
     }
 
     public static void updateONETWOtoONEFOUR() {
@@ -257,6 +260,7 @@ public class Updater {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        updateCompleted();
     }
 
     public static void updateONETHREEtoONEFOUR() {
@@ -343,6 +347,7 @@ public class Updater {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        updateCompleted();
     }
 
     public static void updateMySQLSyntaxToONEFOUR() {
@@ -355,6 +360,13 @@ public class Updater {
         try {
             MySQL.getConnection().prepareStatement("ALTER TABLE sync.playerdata ADD statistics LONGTEXT NULL;").executeUpdate();
         } catch (SQLException ignored) { }
+    }
+
+    public static void updateCompleted() {
+        ConfigManager.reload();
+        if (!Main.isUpdateAvailable()) {
+            Main.logger.log(Level.WARNING, "MySQL Sync is not up to date. Please download the newest version on Spigot: https://www.spigotmc.org/resources/mysql-sync.101554/");
+        }
     }
 
     public static enum Versions {

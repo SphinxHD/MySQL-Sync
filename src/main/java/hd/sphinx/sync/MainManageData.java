@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Level;
 
 public class MainManageData {
 
@@ -113,9 +115,10 @@ public class MainManageData {
             player.setFoodLevel(20);
             player.setLevel(0);
         }
-        player.getInventory().addItem(player.getItemInHand());
-        System.out.println(player.getItemInHand());
-        player.setItemInHand(new ItemStack(Material.AIR));
+        try {
+            player.getInventory().addItem(player.getItemOnCursor());
+            player.setItemOnCursor(new ItemStack(Material.AIR));
+        } catch (Exception exception) { }
         if (storageType == StorageType.MYSQL) {
             ManageMySQLData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
         } else if (storageType == StorageType.MONGODB) {
