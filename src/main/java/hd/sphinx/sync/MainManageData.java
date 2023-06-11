@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.logging.Level;
 
 public class MainManageData {
@@ -72,6 +73,16 @@ public class MainManageData {
                 MongoDB.disconnectMongoDB();
             }
             MongoDB.connectMongoDB();
+        }
+    }
+
+    public static void startShutdown() {
+        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+        for (int i = 0; i < players.size(); i++) {
+            savePlayer(players.iterator().next());
+            if (i == players.size() - 1) {
+                shutdown();
+            }
         }
     }
 
