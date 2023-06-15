@@ -18,6 +18,13 @@ public class ConfigManager {
         if (!languageFile.exists()) {
             Main.main.saveResource("lang/en_EN.yml", false);
             Main.main.saveResource("lang/de_DE.yml", false);
+            Main.main.saveResource("lang/no_NO.yml", false);
+            Main.main.saveResource("lang/ru_RU.yml", false);
+        }
+        File languageFileTwo = new File("plugins/MySQL-Sync/lang/no_NO.yml");
+        if (!languageFileTwo.exists()) {
+            Main.main.saveResource("lang/no_NO.yml", false);
+            Main.main.saveResource("lang/ru_RU.yml", false);
         }
         language = YamlConfiguration.loadConfiguration(languageFile);
     }

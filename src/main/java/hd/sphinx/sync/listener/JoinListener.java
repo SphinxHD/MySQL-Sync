@@ -7,9 +7,11 @@ import hd.sphinx.sync.api.events.GeneratingPlayerProfileEvent;
 import hd.sphinx.sync.api.events.ProcessingLoadingPlayerDataEvent;
 import hd.sphinx.sync.util.ConfigManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
@@ -65,5 +67,11 @@ public class JoinListener implements Listener {
     public void onPickup(PlayerPickupItemEvent event) {
         if (MainManageData.loadedPlayerData.contains(event.getPlayer())) event.setCancelled(true);
         if (DeathListener.deadPlayers.contains(event.getPlayer())) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (!MainManageData.loadedPlayerData.contains(event.getPlayer())) return;
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() != Material.AIR) event.setCancelled(true);
     }
 }

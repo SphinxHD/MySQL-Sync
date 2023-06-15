@@ -1,26 +1,26 @@
 ######################################################
 #                                                    #
-#     en_EN Language file from MySQL-Sync Plugin     #
+#     de_DE Language file from MySQL-Sync Plugin     #
 #               Coded by Leo Schneider               #
 #                                                    #
 ######################################################
 #
-# Translation from:
+# Übersetzung von:
 # - Leo Schneider
 #
-# Notice:
-# - You can use & as color code here and &n fo a new Line.
-# - You can also use %prefix% for the Prefix.
+# Beachte:
+# - Du kannst & als Farbcode und &n für eine neue Zeile benutzen.
+# - Du kannst zudem %prefix% für den Prefix benutzen.
 #
 
-prefix: "&7[&cSync&7]&f" # Prefix of all Messages
-generated: "%prefix% Dein Account wurde generiert." # Message when Player Account in Database was generated
-loading: "%prefix% Wir laden deine Daten... &7Bitte warte." # Message for loading the Player Account from the Database
-loaded: "%prefix% Wir haben deine Daten geladen, du kannst jetzt spielen." # Message when Player Account was loaded from Database
-error: "%prefix% &cEs gab einen Fehler bei dem laden deiner Daten! Bitte kontaktiere einen Admin." # Error while loading the Player Account from Database
-help: "%prefix% &e/sync <args> &8- &fDu kannst &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload &fbenutzen." # Help Message for Main Command
-version: "%prefix% Die Version welche du benutzt ist &e%version%&f." # Version of the Plugin
-reload: "%prefix% &eDie Config wurde neu geladen!" # Config reload Message
-developerFront: "%prefix% Der Entwickler des Plugins ist " # The Front of the Developer Message
-developerBack: "&f." # The Back of the Developer Message
-lackingPermission: "%prefix% &cDir fehlt die Berechtigung &e%permission%&c!" # Lacking Permission Message (%permission% can be used here)
+prefix: "&7[&cSync&7]&f" # Prefix von allen Nachrichten
+generated: "%prefix% Dein Account wurde generiert." # Nachricht wenn Spieler Account in Datenbank generiert wurde
+loading: "%prefix% Wir laden deine Daten... &7Bitte warte." # Nachricht für das laden des Spieler Accounts aus der Datenbank
+loaded: "%prefix% Wir haben deine Daten geladen, du kannst jetzt spielen." # Nachricht wenn Spieler Account aus der Datenbank geladen wurde
+error: "%prefix% &cEs gab einen Fehler bei dem laden deiner Daten! Bitte kontaktiere einen Admin." # Fehler bei dem laden den Spieler Accounts aus der Datenbank
+help: "%prefix% &e/sync <args> &8- &fDu kannst &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload &fbenutzen." # Hilfsnachricht für den Hauptbefehl
+version: "%prefix% Die Version welche du benutzt ist &e%version%&f." # Version des Plugins
+reload: "%prefix% &eDie Config wurde neu geladen!" # Neulade Nachricht der Config
+developerFront: "%prefix% Der Entwickler des Plugins ist " # Vorderer Teil der Entwickler Nachricht
+developerBack: "&f." # Hinterer Teil der Entwickler Nachricht
+lackingPermission: "%prefix% &cDir fehlt die Berechtigung &e%permission%&c!" # Fehlende Berechtigung Nachricht (%permission% kann hier benutzt werden)

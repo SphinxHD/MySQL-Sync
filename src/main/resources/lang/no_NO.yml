@@ -1,0 +1,26 @@
+######################################################
+#                                                    #
+#     no_NO Language file from MySQL-Sync Plugin     #
+#               Coded by Leo Schneider               #
+#                                                    #
+######################################################
+#
+# Translation from:
+# - Theoツ#0074
+#
+# Legge merke til:
+# - Du kan bruke & som fargekode her og &n for en ny linje.
+# - Du kan også bruke %prefix% for prefiksen.
+#
+
+prefix: "&7[&cSync&7]&f" # Prefiks for alle meldinger
+generated: "%prefix% Kontoen din ble generert." # Melding når spillerkonto i databasen ble generert
+loading: "%prefix% Vi laster inn dataene din... &7Vennligst vent." # Melding for lasting av spillerkontoen fra databasen
+loaded: "%prefix% Vi lastet inn dataene din, du kan nå spille." # Melding når spillerkontoen ble lastet inn fra databasen
+error: "%prefix% &cDet oppsto en feil under innlasting av dataen din! Ta kontakt med en administrator." # Feil under innlasting av spillerkontoen fra databasen
+help: "%prefix% &e/sync <args> &8- &fDu kan bruke &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload&f." # Hjelpemelding for hovedkommando
+version: "%prefix% Versjonen du bruker er &e%version%&f." # Versjon av pluginet
+reload: "%prefix% &eKonfigurasjonen ble lastet inn på nytt!" # Config reload Melding
+developerFront: "%prefix% Utvikleren av dette pluginet er " # Forsiden av utviklermeldingen
+developerBack: "&f." # Baksiden av utviklermeldingen
+lackingPermission: "%prefix% &cDu mangler tillatelsen &e%permission%&c!" # Melding om manglende tillatelse (%permission% kan bli brukt her)
