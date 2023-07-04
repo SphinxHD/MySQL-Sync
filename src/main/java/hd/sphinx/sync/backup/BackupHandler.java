@@ -1,6 +1,7 @@
 package hd.sphinx.sync.backup;
 
 import hd.sphinx.sync.Main;
+import hd.sphinx.sync.MainManageData;
 import hd.sphinx.sync.util.AdvancementManager;
 import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.StatisticsManager;
@@ -72,10 +73,7 @@ public class BackupHandler {
                         cachePlayer.setStatistics(StatisticsManager.getStatisticsMap(player));
                         customSyncSettings.setSyncingStatistics(true);
                     }
-
-
-
-                    // ToDo: Saving with CustomSyncSettings
+                    MainManageData.savePlayer(player, customSyncSettings);
                 }
             }
         }, 0L, ConfigManager.config.getInt("settings.backup.backupCycle"));
