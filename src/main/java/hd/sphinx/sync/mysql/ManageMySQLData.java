@@ -6,6 +6,7 @@ import hd.sphinx.sync.api.SyncProfile;
 import hd.sphinx.sync.api.SyncSettings;
 import hd.sphinx.sync.api.events.CompletedLoadingPlayerDataEvent;
 import hd.sphinx.sync.api.events.SavingPlayerDataEvent;
+import hd.sphinx.sync.backup.CustomSyncSettings;
 import hd.sphinx.sync.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -263,6 +264,109 @@ public class ManageMySQLData {
                     @Override
                     public void run() {
                         savePlayer(player, invBase64, ecBase64);
+                    }
+                }, 20);
+            } else {
+                exception.printStackTrace();
+                Main.logger.warning("Something went wrong with saving a Player!");
+                if (ConfigManager.getBoolean("settings.sending.error")) {
+                    player.sendMessage(ConfigManager.getColoredString("messages.error"));
+                }
+            }
+        }
+    }
+
+    public static void savePlayer(Player player, CustomSyncSettings customSyncSettings) {
+        if (MainManageData.loadedPlayerData.contains(player)) return;
+        if (!MySQL.isConnected()) {
+            MySQL.connectMySQL();
+        }
+        try {
+            String statement = "UPDATE playerdata AS p SET p.player_name = ?, p.last_joined = ?";
+            if (customSyncSettings.isSyncingInventory()) {
+                statement = statement + ", p.inventory = ?";
+            }
+            if (customSyncSettings.isSyncingGamemode()) {
+                statement = statement + ", p.gamemode = ?";
+            }
+            if (customSyncSettings.isSyncingHealth()) {
+                statement = statement + ", p.health = ?";
+            }
+            if (customSyncSettings.isSyncingHunger()) {
+                statement = statement + ", p.food = ?";
+            }
+            if (customSyncSettings.isSyncingEnderchest()) {
+                statement = statement + ", p.enderchest = ?";
+            }
+            if (customSyncSettings.isSyncingExp()) {
+                statement = statement + ", p.exp = ?";
+            }
+            if (customSyncSettings.isSyncingEffects()) {
+                statement = statement + ", p.effects = ?";
+            }
+            if (customSyncSettings.isSyncingAdvancements()) {
+                statement = statement + ", p.advancements = ?";
+            }
+            if (customSyncSettings.isSyncingStatistics()) {
+                statement = statement + ", p.statistics = ?";
+            }
+            statement = statement + " WHERE p.player_uuid = ?";
+            SyncProfile syncProfile = new SyncProfile(player);
+            PreparedStatement preparedStatement = MySQL.getConnection().prepareStatement(statement);
+            preparedStatement.setString(1, player.getName());
+            Date dateNow = new Date( );
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
+            preparedStatement.setString(2, simpleDateFormat.format(dateNow));
+
+            String[] arguments = statement.split(",");
+
+            int real = 1;
+            for (String string : arguments) {
+                if (string.contains("inventory")) {
+                    preparedStatement.setString(real, InventoryManager.saveItems(player, player.getInventory()));
+                    syncProfile.setPlayerInventory(player.getInventory());
+                } else if (string.contains("gamemode")) {
+                    preparedStatement.setString(real, String.valueOf(player.getGameMode()));
+                    syncProfile.setGameMode(player.getGameMode());
+                } else if (string.contains("health")) {
+                    preparedStatement.setInt(real, (int) player.getHealth());
+                    syncProfile.setHealth(player.getHealth());
+                } else if (string.contains("food")) {
+                    preparedStatement.setInt(real, player.getFoodLevel());
+                    syncProfile.setHunger(player.getFoodLevel());
+                } else if (string.contains("enderchest")) {
+                    preparedStatement.setString(real, InventoryManager.saveEChest(player));
+                    syncProfile.setEnderChest(player.getEnderChest());
+                } else if (string.contains("exp")) {
+                    preparedStatement.setInt(real, player.getLevel());
+                    syncProfile.setExp(player.getLevel());
+                } else if (string.contains("effects")) {
+                    Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
+                    PotionEffect[] effectArray = new ArrayList<PotionEffect>(effectCollection).toArray(new PotionEffect[0]);
+                    preparedStatement.setString(real, BukkitSerialization.potionEffectArrayToBase64(effectArray));
+                    syncProfile.setPotionEffects(effectCollection);
+                } else if (string.contains("advancements")) {
+                    HashMap<Advancement, Boolean> advancementMap = AdvancementManager.getAdvancementMap(player);
+                    preparedStatement.setString(real, BukkitSerialization.advancementBooleanHashMapToBase64(advancementMap));
+                    syncProfile.setAdvancements(advancementMap);
+                } else if (string.contains("statistics")) {
+                    HashMap<String, Integer> statisticsMap = StatisticsManager.getStatisticsMap(player);
+                    preparedStatement.setString(real, BukkitSerialization.statisticsIntegerHashMapToBase64(statisticsMap));
+                    syncProfile.setRawStatistics(statisticsMap);
+                }
+                real++;
+            }
+            preparedStatement.setString(real, String.valueOf(player.getUniqueId()));
+            preparedStatement.executeUpdate();
+            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+        } catch (SQLException exception) {
+            if (!MySQL.isConnected()) {
+                MySQL.connectMySQL();
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                    @Override
+                    public void run() {
+                        savePlayer(player, customSyncSettings);
                     }
                 }, 20);
             } else {

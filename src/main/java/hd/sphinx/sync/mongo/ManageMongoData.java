@@ -1,6 +1,5 @@
 package hd.sphinx.sync.mongo;
 
-import com.mongodb.*;
 import com.mongodb.client.model.ReplaceOptions;
 import hd.sphinx.sync.Main;
 import hd.sphinx.sync.MainManageData;
@@ -8,7 +7,7 @@ import hd.sphinx.sync.api.SyncProfile;
 import hd.sphinx.sync.api.SyncSettings;
 import hd.sphinx.sync.api.events.CompletedLoadingPlayerDataEvent;
 import hd.sphinx.sync.api.events.SavingPlayerDataEvent;
-import hd.sphinx.sync.listener.DeathListener;
+import hd.sphinx.sync.backup.CustomSyncSettings;
 import hd.sphinx.sync.util.*;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -200,6 +199,71 @@ public class ManageMongoData {
                 syncProfile.setAdvancements(advancementMap);
             }
             if (ConfigManager.getBoolean("settings.syncing.statistics")) {
+                HashMap<String, Integer> statisticsMap = StatisticsManager.getStatisticsMap(player);
+                document.append("statistics", BukkitSerialization.statisticsIntegerHashMapToBase64(statisticsMap));
+                syncProfile.setRawStatistics(statisticsMap);
+            }
+            ReplaceOptions replaceOptions = new ReplaceOptions().upsert(true);
+            MongoDB.getMongoCollection().replaceOne(eq("_id", document.get("_id")), document, replaceOptions);
+            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+        } catch (Exception ignored) {
+            Main.logger.warning("Something went wrong with saving a Player!");
+            if (ConfigManager.getBoolean("settings.sending.error")) {
+                player.sendMessage(ConfigManager.getColoredString("messages.error"));
+            }
+        }
+    }
+
+    public static void savePlayer(Player player, CustomSyncSettings customSyncSettings) {
+        if (MainManageData.loadedPlayerData.contains(player)) return;
+        if (!MongoDB.isConnected()) {
+            MongoDB.connectMongoDB();
+        }
+        try {
+            SyncProfile syncProfile = new SyncProfile(player);
+            Document document = new Document();
+            document.append("_id", player.getUniqueId().toString());
+            document.append("player_name", player.getName());
+            java.util.Date dateNow = new Date();
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("MM.dd.yyyy G 'at' HH:mm:ss z");
+            document.append("last_joined", simpleDateFormat.format(dateNow));
+            if (customSyncSettings.isSyncingInventory()) {
+                document.append("inventory", InventoryManager.saveItems(player, player.getInventory()));
+                syncProfile.setPlayerInventory(player.getInventory());
+            }
+            if (customSyncSettings.isSyncingGamemode()) {
+                document.append("gamemode", String.valueOf(player.getGameMode()));
+                syncProfile.setGameMode(player.getGameMode());
+            }
+            if (customSyncSettings.isSyncingHealth()) {
+                document.append("health", player.getHealth());
+                syncProfile.setHealth(player.getHealth());
+            }
+            if (customSyncSettings.isSyncingHunger()) {
+                document.append("food", player.getFoodLevel());
+                syncProfile.setHunger(player.getFoodLevel());
+            }
+            if (customSyncSettings.isSyncingEnderchest()) {
+                document.append("enderchest", InventoryManager.saveEChest(player));
+                syncProfile.setEnderChest(player.getEnderChest());
+            }
+            if (customSyncSettings.isSyncingExp()) {
+                document.append("exp", player.getLevel());
+                syncProfile.setExp(player.getLevel());
+            }
+            if (customSyncSettings.isSyncingEffects()) {
+                Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
+                PotionEffect[] effectArray = new ArrayList<PotionEffect>(effectCollection).toArray(new PotionEffect[0]);
+                document.append("effects", BukkitSerialization.potionEffectArrayToBase64(effectArray));
+                syncProfile.setPotionEffects(effectCollection);
+            }
+            if (customSyncSettings.isSyncingAdvancements()) {
+                HashMap<Advancement, Boolean> advancementMap = AdvancementManager.getAdvancementMap(player);
+                document.append("advancements", BukkitSerialization.advancementBooleanHashMapToBase64(advancementMap));
+                syncProfile.setAdvancements(advancementMap);
+            }
+            if (customSyncSettings.isSyncingStatistics()) {
                 HashMap<String, Integer> statisticsMap = StatisticsManager.getStatisticsMap(player);
                 document.append("statistics", BukkitSerialization.statisticsIntegerHashMapToBase64(statisticsMap));
                 syncProfile.setRawStatistics(statisticsMap);

@@ -1,5 +1,7 @@
 package hd.sphinx.sync;
 
+import hd.sphinx.sync.backup.BackupHandler;
+import hd.sphinx.sync.backup.CustomSyncSettings;
 import hd.sphinx.sync.listener.DeathListener;
 import hd.sphinx.sync.mongo.ManageMongoData;
 import hd.sphinx.sync.mongo.MongoDB;
@@ -14,9 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.logging.Level;
 
 public class MainManageData {
 
@@ -43,9 +43,13 @@ public class MainManageData {
         } else if (storageType == StorageType.MONGODB) {
             MongoDB.connectMongoDB();
         }
+
+        BackupHandler.initialize();
     }
 
     public static void reload() {
+        BackupHandler.shutdown();
+
         try {
             storageType = StorageType.valueOf(ConfigManager.getString("settings.storageType"));
         } catch (Exception exception) {
@@ -74,9 +78,13 @@ public class MainManageData {
             }
             MongoDB.connectMongoDB();
         }
+
+        BackupHandler.initialize();
     }
 
     public static void startShutdown() {
+        BackupHandler.shutdown();
+
         Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
         for (int i = 0; i < players.size(); i++) {
             savePlayer(players.iterator().next());
@@ -134,6 +142,18 @@ public class MainManageData {
             ManageMySQLData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
         } else if (storageType == StorageType.MONGODB) {
             ManageMongoData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
+        }
+    }
+
+    public static void savePlayer(Player player, CustomSyncSettings customSyncSettings) {
+        try {
+            player.getInventory().addItem(player.getItemOnCursor());
+            player.setItemOnCursor(new ItemStack(Material.AIR));
+        } catch (Exception exception) { }
+        if (storageType == StorageType.MYSQL) {
+            ManageMySQLData.savePlayer(player, customSyncSettings);
+        } else if (storageType == StorageType.MONGODB) {
+            ManageMongoData.savePlayer(player, customSyncSettings);
         }
     }
 
