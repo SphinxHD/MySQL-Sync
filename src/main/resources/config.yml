@@ -31,6 +31,19 @@ settings:
   onlySyncPermission: false # Only Sync the Players Data with the permission "sync.sync"
   usePermission: false # You will need to set the Player the following Permission for the /sync command: "sync.command" (Players still need "sync.reload" to reload the Config)
   language: "en_EN" # Which language should be used, valid languages are at the moment, en_EN (English) and de_DE (German) or if you add a own language in the lang folder.
+  backup: # Backups of data are needed if the server may crash. If you disable it, data will be lost after a crash of the server.
+    enabled: true # Set false to disable Backups of data and true to enable Backups of data.
+    backupCycle: 1200 # The Cycle in which the plugin should Backup data, the time must be in ticks (1200 Ticks are 1 Minute)
+    values:
+      inventory: true # If the Inventory of the Player should be backed up.
+      enderchest: true # If the Enderchest of the Player should be backed up.
+      exp: true # If the EXP of the Player should be backed up.
+      gamemode: true # If the Gamemode of the Player should be backed up.
+      hunger: true # If the Hunger of the Player should be backed up.
+      health: true # If the Health of the Player should be backed up.
+      effects: false # If the Effects of the Player should be backed up.
+      advancements: false # If the Advancements of the Player should be backed up.
+      statistics: false # If the Statistics of the Player should be backed up.
 
 
 #
