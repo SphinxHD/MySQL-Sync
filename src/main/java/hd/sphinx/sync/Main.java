@@ -28,6 +28,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents((Listener) new JoinListener(), (Plugin) this);
         pluginManager.registerEvents((Listener) new QuitListener(), (Plugin) this);
         pluginManager.registerEvents((Listener) new DeathListener(), (Plugin) this);
+        pluginManager.registerEvents((Listener) new ShutdownListener(), (Plugin) this);
     }
 
     public static Boolean isUpdateAvailable() {
@@ -66,6 +67,6 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        MainManageData.startShutdown();
+
     }
 }
