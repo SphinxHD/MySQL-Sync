@@ -15,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
+import java.util.ArrayList;
+
 public class JoinListener implements Listener {
 
     @EventHandler
@@ -22,6 +24,7 @@ public class JoinListener implements Listener {
         Player player = event.getPlayer();
         if (ConfigManager.getBoolean("settings.onlySyncPermission") && !player.hasPermission("sync.sync")) return;
         MainManageData.loadedPlayerData.add(player);
+        MainManageData.commandHashMap.put(player, new ArrayList<String>());
         if (DeathListener.deadPlayers.contains(player)) {
             DeathListener.deadPlayers.remove(player);
         }

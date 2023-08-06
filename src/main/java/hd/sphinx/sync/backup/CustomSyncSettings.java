@@ -1,18 +1,26 @@
 package hd.sphinx.sync.backup;
 
 public class CustomSyncSettings {
-    private Boolean inventory = false;
-    private Boolean enderchest = false;
-    private Boolean exp = false;
-    private Boolean gamemode = false;
-    private Boolean hunger = false;
-    private Boolean health = false;
-    private Boolean effects = false;
-    private Boolean advancements = false;
-    private Boolean statistics = false;
+    private Boolean inventory;
+    private Boolean enderchest;
+    private Boolean exp;
+    private Boolean gamemode;
+    private Boolean hunger;
+    private Boolean health;
+    private Boolean effects;
+    private Boolean advancements;
+    private Boolean statistics;
 
     public CustomSyncSettings() {
-
+        inventory = false;
+        enderchest = false;
+        exp = false;
+        gamemode = false;
+        hunger = false;
+        health = false;
+        effects = false;
+        advancements = false;
+        statistics = false;
     }
 
     public void setSyncingInventory(Boolean bool) {

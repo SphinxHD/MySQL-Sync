@@ -1,5 +1,7 @@
 package hd.sphinx.sync.backup;
 
+import hd.sphinx.sync.util.AdvancementManager;
+import hd.sphinx.sync.util.StatisticsManager;
 import org.bukkit.GameMode;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
@@ -26,6 +28,15 @@ public class CachePlayer {
 
     public CachePlayer(Player player) {
         this.player = player;
+        this.inventory = player.getInventory();
+        this.enderchest = player.getEnderChest();
+        this.exp = player.getLevel();
+        this.gamemode = player.getGameMode();
+        this.hunger = player.getFoodLevel();
+        this.health = player.getHealth();
+        this.effects = player.getActivePotionEffects();
+        this.advancements = AdvancementManager.getAdvancementMap(player);
+        this.statistics = StatisticsManager.getStatisticsMap(player);
     }
 
     public Player getPlayer() {
@@ -41,7 +52,7 @@ public class CachePlayer {
     }
 
     public Boolean compareInventory(Inventory inventory) {
-        return this.inventory == inventory;
+        return this.inventory.iterator().equals(inventory.iterator());
     }
 
     public void setEnderchest(Inventory enderchest) {
@@ -53,7 +64,7 @@ public class CachePlayer {
     }
 
     public Boolean compareEnderchest(Inventory enderchest) {
-        return this.enderchest == enderchest;
+        return this.enderchest.iterator().equals(enderchest.iterator());
     }
 
     public void setExp(Integer exp) {

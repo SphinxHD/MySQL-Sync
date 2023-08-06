@@ -364,9 +364,6 @@ public class Updater {
 
     public static void updateCompleted() {
         ConfigManager.reload();
-        if (!Main.isUpdateAvailable()) {
-            Main.logger.log(Level.WARNING, "MySQL Sync is not up to date. Please download the newest version on Spigot: https://www.spigotmc.org/resources/mysql-sync.101554/");
-        }
     }
 
     public static enum Versions {

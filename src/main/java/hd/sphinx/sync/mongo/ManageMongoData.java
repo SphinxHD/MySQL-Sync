@@ -138,6 +138,9 @@ public class ManageMongoData {
                 @Override
                 public void run() {
                     MainManageData.loadedPlayerData.remove(player);
+                    for (String command : MainManageData.commandHashMap.get(player)) {
+                        player.performCommand(command.replaceFirst("/", ""));
+                    }
                 }
             }, 5l);
             Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));

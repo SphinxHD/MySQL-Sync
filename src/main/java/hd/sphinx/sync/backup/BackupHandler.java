@@ -37,39 +37,39 @@ public class BackupHandler {
                         playerCache.put(player, cachePlayer);
                     }
                     CustomSyncSettings customSyncSettings = new CustomSyncSettings();
-                    if (inventory && cachePlayer.compareInventory(player.getInventory())) {
+                    if (inventory && !cachePlayer.compareInventory(player.getInventory())) {
                         cachePlayer.setInventory(player.getInventory());
                         customSyncSettings.setSyncingInventory(true);
                     }
-                    if (enderchest && cachePlayer.compareEnderchest(player.getEnderChest())) {
+                    if (enderchest && !cachePlayer.compareEnderchest(player.getEnderChest())) {
                         cachePlayer.setEnderchest(player.getEnderChest());
                         customSyncSettings.setSyncingEnderchest(true);
                     }
-                    if (exp && cachePlayer.compareExp(player.getLevel())) {
+                    if (exp && !cachePlayer.compareExp(player.getLevel())) {
                         cachePlayer.setExp(player.getLevel());
                         customSyncSettings.setSyncingExp(true);
                     }
-                    if (gamemode && cachePlayer.compareGamemode(player.getGameMode())) {
+                    if (gamemode && !cachePlayer.compareGamemode(player.getGameMode())) {
                         cachePlayer.setGamemode(player.getGameMode());
                         customSyncSettings.setSyncingGamemode(true);
                     }
-                    if (hunger && cachePlayer.compareHunger(player.getFoodLevel())) {
+                    if (hunger && !cachePlayer.compareHunger(player.getFoodLevel())) {
                         cachePlayer.setHunger(player.getFoodLevel());
                         customSyncSettings.setSyncingHunger(true);
                     }
-                    if (health && cachePlayer.compareHealth(player.getHealth())) {
+                    if (health && !cachePlayer.compareHealth(player.getHealth())) {
                         cachePlayer.setHealth(player.getHealth());
                         customSyncSettings.setSyncingHealth(true);
                     }
-                    if (effects && cachePlayer.compareEffects(player.getActivePotionEffects())) {
+                    if (effects && !cachePlayer.compareEffects(player.getActivePotionEffects())) {
                         cachePlayer.setEffects(player.getActivePotionEffects());
                         customSyncSettings.setSyncingEffects(true);
                     }
-                    if (advancements && cachePlayer.compareAdvancements(AdvancementManager.getAdvancementMap(player))) {
+                    if (advancements && !cachePlayer.compareAdvancements(AdvancementManager.getAdvancementMap(player))) {
                         cachePlayer.setAdvancements(AdvancementManager.getAdvancementMap(player));
                         customSyncSettings.setSyncingAdvancements(true);
                     }
-                    if (statistics && cachePlayer.compareStatistics(StatisticsManager.getStatisticsMap(player))) {
+                    if (statistics && !cachePlayer.compareStatistics(StatisticsManager.getStatisticsMap(player))) {
                         cachePlayer.setStatistics(StatisticsManager.getStatisticsMap(player));
                         customSyncSettings.setSyncingStatistics(true);
                     }

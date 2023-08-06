@@ -17,12 +17,14 @@ import org.bukkit.inventory.ItemStack;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class MainManageData {
 
     public static StorageType storageType;
 
     public static ArrayList<Player> loadedPlayerData = new ArrayList<Player>();
+    public static HashMap<Player, ArrayList<String>> commandHashMap = new HashMap<Player, ArrayList<String>>();
 
     public static void initialize() {
         try {
@@ -87,7 +89,8 @@ public class MainManageData {
 
         Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
         for (int i = 0; i < players.size(); i++) {
-            savePlayer(players.iterator().next());
+            Player player = players.iterator().next();
+            savePlayer(player);
             if (i == players.size() - 1) {
                 shutdown();
             }
@@ -137,7 +140,7 @@ public class MainManageData {
         try {
             player.getInventory().addItem(player.getItemOnCursor());
             player.setItemOnCursor(new ItemStack(Material.AIR));
-        } catch (Exception exception) { }
+        } catch (Exception ignored) { }
         if (storageType == StorageType.MYSQL) {
             ManageMySQLData.savePlayer(player, InventoryManager.saveItems(player, player.getInventory()), InventoryManager.saveEChest(player));
         } else if (storageType == StorageType.MONGODB) {
@@ -149,7 +152,7 @@ public class MainManageData {
         try {
             player.getInventory().addItem(player.getItemOnCursor());
             player.setItemOnCursor(new ItemStack(Material.AIR));
-        } catch (Exception exception) { }
+        } catch (Exception ignored) { }
         if (storageType == StorageType.MYSQL) {
             ManageMySQLData.savePlayer(player, customSyncSettings);
         } else if (storageType == StorageType.MONGODB) {
