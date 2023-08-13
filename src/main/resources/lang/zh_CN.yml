@@ -1,0 +1,26 @@
+######################################################
+#                                                    #
+#     zh_CN Language file from MySQL-Sync Plugin     #
+#               Coded by Leo Schneider               #
+#                                                    #
+######################################################
+#
+# Translation from:
+# - github.com/ifloppy
+#
+# 注:
+# - 您可以使用 & 作为颜色代码，使用 &n 作为换行符
+# - 您也可以使用 %prefix% 作为前缀
+#
+
+prefix: "&7[&c同步系统&7]&f" # 所有消息的前缀
+generated: "%prefix% 您的账户已被创建" # 玩家账户在数据库中被创建的消息
+loading: "%prefix% 我们正在加载您的数据... &7请稍候" # 正在从数据库中加载玩家数据的消息
+loaded: "%prefix% 我们加载了您的数据，现在您可以正常游戏了" #从数据库中加载完玩家数据的消息
+error: "%prefix% &c加载您的数据时发生了错误，请联系管理员！" # 从数据库中加载玩家数据时出错
+help: "%prefix% &e/sync <参数> &8- &f您可以使用 &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload&f." # 主命令的帮助
+version: "%prefix% 您正在使用的版本为 &e%version%&f." # 插件的版本
+reload: "%prefix% &e配置文件已重载" # 插件重载消息
+developerFront: "%prefix% 本插件的开发者为 " # 开发者消息的正面
+developerBack: "&f." # 开发者消息的背面
+lackingPermission: "%prefix% &c您缺少权限 &e%permission%&c!" # 缺失权限消息 (%permission% 可用)
