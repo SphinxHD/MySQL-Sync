@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 public class MainCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String cmdlable, String[] args) {
+        if (args.length == 1 && args[0].equalsIgnoreCase("joinvoid")) return true;
         if (ConfigManager.getBoolean("settings.use-permission") && !sender.hasPermission("sync.command")) {
             sender.sendMessage(ConfigManager.getColoredString("messages.lacking-permission").replaceAll("%permission%", "sync.command"));
             return true;

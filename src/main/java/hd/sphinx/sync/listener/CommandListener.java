@@ -19,7 +19,7 @@ public class CommandListener implements Listener {
             ArrayList<String> commands = MainManageData.commandHashMap.get(player);
             commands.add(event.getMessage());
             MainManageData.commandHashMap.put(player, commands);
-            event.setCancelled(true);
+            event.setMessage("/sync joinvoid");
             return;
         }
         if (!commandArgs[0].equalsIgnoreCase("/stop")) return;
