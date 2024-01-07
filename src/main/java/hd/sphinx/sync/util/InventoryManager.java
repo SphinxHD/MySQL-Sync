@@ -8,14 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 public class InventoryManager {
-
+    private static final int INVENTORY_SIZE = 41;
+    
     public static String saveItems(@NotNull Player player, @NotNull PlayerInventory playerInventory) {
-        ItemStack[] items = new ItemStack[41];
-        int i = 0;
-        while (i <= 40) {
+        ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+
+        for (int i = 0; i < items.length; i++) {
             items[i] = playerInventory.getItem(i);
-            i++;
         }
+        
         return BukkitSerialization.itemStackArrayToBase64(items);
     }
 
