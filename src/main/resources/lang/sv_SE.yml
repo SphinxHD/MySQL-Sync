@@ -1,0 +1,25 @@
+######################################################
+#                                                    #
+#     sv_SE Language file from MySQL-Sync Plugin     #
+#               Coded by Leo Schneider               #
+#                                                    #
+######################################################
+#
+# Översättning av:
+# - DLmass
+#
+# Observera:
+# - Du kan använda & som färgkod här och \n för en ny rad.
+# - Du kan även använda %prefix% för prefixet.
+
+prefix: "&7[&cSync&7]&f" # Prefix för alla meddelanden
+generated: "%prefix% Ditt konto har genererats." # Meddelande när spelarkontot i databasen har genererats
+loading: "%prefix% Vi laddar din data... &7Var god vänta." # Meddelande för att ladda spelarkontot från databasen
+loaded: "%prefix% Vi har laddat din data, du kan nu spela." # Meddelande när spelarkontot har laddats från databasen
+error: "%prefix% &cEtt fel uppstod vid laddning av din data! Kontakta en administratör." # Fel vid laddning av spelarkontot från databasen
+help: "%prefix% &e/sync <args> &8- &fDu kan använda &e&ohelp&f, &e&oversion&f, &e&odev&f, &e&oreload&f." # Hjälpmeddelande för huvudkommandot
+version: "%prefix% Den version du använder är &e%version%&f." # Plugin-versionen
+reload: "%prefix% &eKonfigurationen har laddats om!" # Meddelande vid omladdning av konfigurationen
+developerFront: "%prefix% Utvecklaren av denna plugin är " # Framsidan av utvecklarmeddelandet
+developerBack: "&f." # Baksidan av utvecklarmeddelandet
+lackingPermission: "%prefix% &cDu saknar behörigheten &e%permission%&c!" # Meddelande vid bristande behörighet (%permission% kan användas här)

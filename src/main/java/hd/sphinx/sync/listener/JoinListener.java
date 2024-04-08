@@ -45,6 +45,7 @@ public class JoinListener implements Listener {
                     player.setLevel(0);
                 }
             }
+            return;
         } else {
             if (ConfigManager.getBoolean("settings.syncing.enderchest")) {
                 player.getEnderChest().clear();
@@ -58,7 +59,7 @@ public class JoinListener implements Listener {
         }
         player.sendMessage(ConfigManager.getColoredString("messages.loading"));
         Bukkit.getPluginManager().callEvent(new ProcessingLoadingPlayerDataEvent(player, new SyncSettings()));
-        Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Main.main, new Runnable() {
             @Override
             public void run() {
                 MainManageData.loadPlayer(player);

@@ -162,7 +162,12 @@ public class ManageMySQLData {
                     }
                 }
             }, 5l);
-            Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (SQLException exception) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
@@ -259,7 +264,13 @@ public class ManageMySQLData {
             }
             preparedStatement.setString(real, String.valueOf(player.getUniqueId()));
             preparedStatement.executeUpdate();
-            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (SQLException exception) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
@@ -362,11 +373,17 @@ public class ManageMySQLData {
             }
             preparedStatement.setString(real, String.valueOf(player.getUniqueId()));
             preparedStatement.executeUpdate();
-            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (SQLException exception) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(Main.main, new Runnable() {
                     @Override
                     public void run() {
                         savePlayer(player, customSyncSettings);

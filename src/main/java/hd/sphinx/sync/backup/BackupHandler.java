@@ -25,7 +25,7 @@ public class BackupHandler {
         Boolean advancements = getSaveBool("advancements");
         Boolean statistics = getSaveBool("statistics");
         HashMap<Player, CachePlayer> playerCache = new HashMap<Player, CachePlayer>();
-        id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.main, new Runnable() {
+        id = Bukkit.getScheduler().scheduleAsyncRepeatingTask(Main.main, new Runnable() {
             @Override
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {

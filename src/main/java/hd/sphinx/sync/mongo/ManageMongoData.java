@@ -143,8 +143,14 @@ public class ManageMongoData {
                     }
                 }
             }, 5l);
-            Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (Exception ignored) {
+            ignored.printStackTrace();
             Main.logger.warning("Something went wrong with loading a Player!");
             if (ConfigManager.getBoolean("settings.sending.error")) {
                 player.sendMessage(ConfigManager.getColoredString("messages.error"));
@@ -208,7 +214,12 @@ public class ManageMongoData {
             }
             ReplaceOptions replaceOptions = new ReplaceOptions().upsert(true);
             MongoDB.getMongoCollection().replaceOne(eq("_id", document.get("_id")), document, replaceOptions);
-            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (Exception ignored) {
             Main.logger.warning("Something went wrong with saving a Player!");
             if (ConfigManager.getBoolean("settings.sending.error")) {
@@ -273,7 +284,12 @@ public class ManageMongoData {
             }
             ReplaceOptions replaceOptions = new ReplaceOptions().upsert(true);
             MongoDB.getMongoCollection().replaceOne(eq("_id", document.get("_id")), document, replaceOptions);
-            Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
+                @Override
+                public void run() {
+                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
+                }
+            }, 1L);
         } catch (Exception ignored) {
             Main.logger.warning("Something went wrong with saving a Player!");
             if (ConfigManager.getBoolean("settings.sending.error")) {
