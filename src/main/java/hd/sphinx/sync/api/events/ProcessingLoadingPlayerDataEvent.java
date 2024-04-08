@@ -15,7 +15,7 @@ public class ProcessingLoadingPlayerDataEvent extends Event {
     public ProcessingLoadingPlayerDataEvent(Player player, SyncSettings syncSettings) {
         this.player = player;
         this.syncSettings = syncSettings;
-     }
+    }
 
     @Override
     public HandlerList getHandlers() {

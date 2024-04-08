@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>MySQL-Sync</groupId>
+    <groupId>hd.sphinx</groupId>
     <artifactId>MySQL-Sync</artifactId>
-    <version>1.2.1</version>
+    <version>1.4.10</version>
     <packaging>jar</packaging>
 
     <name>MySQL-Sync</name>
@@ -16,6 +16,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <url>https://pixelation-games.net</url>
 
     <build>
         <plugins>
@@ -31,12 +32,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>hd.sphinx.sync</shadedPattern>
+                            <shadedPattern>hd.sphinx</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -60,7 +61,7 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
+            <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
@@ -85,8 +86,13 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.9.1</version>
         </dependency>
     </dependencies>
 </project>

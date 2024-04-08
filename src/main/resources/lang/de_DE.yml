@@ -9,7 +9,7 @@
 # - Leo Schneider
 #
 # Beachte:
-# - Du kannst & als Farbcode und &n für eine neue Zeile benutzen.
+# - Du kannst & als Farbcode und \n für eine neue Zeile benutzen.
 # - Du kannst zudem %prefix% für den Prefix benutzen.
 #
 

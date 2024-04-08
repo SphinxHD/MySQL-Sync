@@ -10,10 +10,12 @@ public class GeneratingPlayerProfileEvent extends Event {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
     private Player player;
+    private Boolean loadingFromExistingData;
 
-    public GeneratingPlayerProfileEvent(Player player) {
+    public GeneratingPlayerProfileEvent(Player player, Boolean loadingFromExistingData) {
         this.player = player;
-     }
+        this.loadingFromExistingData = loadingFromExistingData;
+    }
 
     @Override
     public HandlerList getHandlers() {
@@ -26,5 +28,9 @@ public class GeneratingPlayerProfileEvent extends Event {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Boolean isLoadingFromExistingData() {
+        return loadingFromExistingData;
     }
 }
