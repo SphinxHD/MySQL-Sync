@@ -32,6 +32,7 @@ public class Main extends JavaPlugin {
         pluginManager.registerEvents((Listener) new QuitListener(), (Plugin) this);
         pluginManager.registerEvents((Listener) new DeathListener(), (Plugin) this);
         pluginManager.registerEvents((Listener) new CommandListener(), (Plugin) this);
+        pluginManager.registerEvents((Listener) new ShutdownListener(), (Plugin) this);
     }
 
     public static Boolean isUpdateAvailable() {

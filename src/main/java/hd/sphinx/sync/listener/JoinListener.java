@@ -33,7 +33,7 @@ public class JoinListener implements Listener {
                 player.sendMessage(ConfigManager.getColoredString("messages.generated"));
             }
             MainManageData.generatePlayer(player);
-            Bukkit.getPluginManager().callEvent(new GeneratingPlayerProfileEvent(player));
+            Bukkit.getPluginManager().callEvent(new GeneratingPlayerProfileEvent(player, ConfigManager.getBoolean("settings.usingOldData")));
             if (!ConfigManager.getBoolean("settings.usingOldData")) {
                 if (ConfigManager.getBoolean("settings.syncing.enderchest")) {
                     player.getEnderChest().clear();

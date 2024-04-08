@@ -47,7 +47,7 @@ public class ManageMySQLData {
             preparedStatement.setString(2, player.getName());
             java.util.Date dateNow = new Date( );
             SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
+                    new SimpleDateFormat ("MM.dd.yyyy 'at' HH:mm:ss z");
             preparedStatement.setString(3, simpleDateFormat.format(dateNow));
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
@@ -148,7 +148,7 @@ public class ManageMySQLData {
                 result = resultSet.getString("statistics");
                 try {
                     if (result != null && ConfigManager.getBoolean("settings.syncing.statistics")) {
-                       syncProfile.setRawStatistics(StatisticsManager.loadPlayerStatistics(player, result));
+                        syncProfile.setRawStatistics(StatisticsManager.loadPlayerStatistics(player, result));
                     }
                 } catch (Exception ignored) { }
                 player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
@@ -216,7 +216,7 @@ public class ManageMySQLData {
             preparedStatement.setString(1, player.getName());
             Date dateNow = new Date( );
             SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
+                    new SimpleDateFormat ("MM.dd.yyyy 'at' HH:mm:ss z");
             preparedStatement.setString(2, simpleDateFormat.format(dateNow));
 
             String[] arguments = statement.split(",");
@@ -319,7 +319,7 @@ public class ManageMySQLData {
             preparedStatement.setString(1, player.getName());
             Date dateNow = new Date( );
             SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat ("MM.dd.yyyy G 'at' HH:mm:ss z");
+                    new SimpleDateFormat ("MM.dd.yyyy 'at' HH:mm:ss z");
             preparedStatement.setString(2, simpleDateFormat.format(dateNow));
 
             String[] arguments = statement.split(",");

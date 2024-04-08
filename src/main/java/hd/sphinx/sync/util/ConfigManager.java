@@ -35,7 +35,7 @@ public class ConfigManager {
     }
 
     public static String getColoredString(String path) {
-        return getString(path).replaceAll("%prefix%", getString("messages.prefix")).replaceAll("&", "§").replaceAll("&n", "\n");
+        return getString(path).replaceAll("%prefix%", getString("messages.prefix")).replaceAll("&", "§");
     }
 
     public static Boolean getBoolean(String path) {

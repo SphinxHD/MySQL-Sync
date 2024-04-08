@@ -1,6 +1,5 @@
 package hd.sphinx.sync.mongo;
 
-import com.mongodb.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -8,8 +7,6 @@ import com.mongodb.client.MongoDatabase;
 import hd.sphinx.sync.Main;
 import hd.sphinx.sync.util.ConfigManager;
 import org.bukkit.Bukkit;
-
-import java.util.Collection;
 
 public class MongoDB {
 
