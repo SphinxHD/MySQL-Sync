@@ -31,6 +31,10 @@ public class ConfigManager {
             Main.main.saveResource("lang/zh_CN.yml", false);
             Main.main.saveResource("lang/sv_SE.yml", false);
         }
+        File languageFileFour = new File("plugins/MySQL-Sync/lang/ja_JP.yml");
+        if (!languageFileFour.exists()) {
+            Main.main.saveResource("lang/ja_JP.yml", false);
+        }
         language = YamlConfiguration.loadConfiguration(languageFile);
     }
 

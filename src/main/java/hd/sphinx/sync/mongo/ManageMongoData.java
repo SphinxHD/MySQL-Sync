@@ -134,21 +134,8 @@ public class ManageMongoData {
                 }
             } catch (Exception ignored) { }
             player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
-            Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
-                @Override
-                public void run() {
-                    MainManageData.loadedPlayerData.remove(player);
-                    for (String command : MainManageData.commandHashMap.get(player)) {
-                        player.performCommand(command.replaceFirst("/", ""));
-                    }
-                }
-            }, 5l);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new CompletedLoadingPlayerDataEvent(player, new SyncSettings(), syncProfile));
-                }
-            }, 1L);
+            Main.schedulerManager.getScheduler().scheduleExecuteCommands(player);
+            Main.schedulerManager.getScheduler().scheduleCompleteLoadEvent(player, syncProfile);
         } catch (Exception ignored) {
             ignored.printStackTrace();
             Main.logger.warning("Something went wrong with loading a Player!");
@@ -214,12 +201,7 @@ public class ManageMongoData {
             }
             ReplaceOptions replaceOptions = new ReplaceOptions().upsert(true);
             MongoDB.getMongoCollection().replaceOne(eq("_id", document.get("_id")), document, replaceOptions);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
-                }
-            }, 1L);
+            Main.schedulerManager.getScheduler().scheduleSavingDataEvent(player, syncProfile);
         } catch (Exception ignored) {
             Main.logger.warning("Something went wrong with saving a Player!");
             if (ConfigManager.getBoolean("settings.sending.error")) {
@@ -284,12 +266,7 @@ public class ManageMongoData {
             }
             ReplaceOptions replaceOptions = new ReplaceOptions().upsert(true);
             MongoDB.getMongoCollection().replaceOne(eq("_id", document.get("_id")), document, replaceOptions);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.main, new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.getPluginManager().callEvent(new SavingPlayerDataEvent(player, new SyncSettings(), syncProfile));
-                }
-            }, 1L);
+            Main.schedulerManager.getScheduler().scheduleSavingDataEvent(player, syncProfile);
         } catch (Exception ignored) {
             Main.logger.warning("Something went wrong with saving a Player!");
             if (ConfigManager.getBoolean("settings.sending.error")) {

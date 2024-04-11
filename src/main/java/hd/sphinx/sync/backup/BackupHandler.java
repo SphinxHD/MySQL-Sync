@@ -15,6 +15,10 @@ public class BackupHandler {
     public static Integer id;
 
     public static void initialize() {
+        Main.schedulerManager.getScheduler().scheduleBackupTask();
+    }
+
+    public static void handleCycle() {
         Boolean inventory = getSaveBool("inventory");
         Boolean enderchest = getSaveBool("enderchest");
         Boolean exp = getSaveBool("exp");
@@ -25,62 +29,57 @@ public class BackupHandler {
         Boolean advancements = getSaveBool("advancements");
         Boolean statistics = getSaveBool("statistics");
         HashMap<Player, CachePlayer> playerCache = new HashMap<Player, CachePlayer>();
-        id = Bukkit.getScheduler().scheduleAsyncRepeatingTask(Main.main, new Runnable() {
-            @Override
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    CachePlayer cachePlayer;
-                    if (playerCache.containsKey(player)) {
-                        cachePlayer = playerCache.get(player);
-                    } else {
-                        cachePlayer = new CachePlayer(player);
-                        playerCache.put(player, cachePlayer);
-                    }
-                    CustomSyncSettings customSyncSettings = new CustomSyncSettings();
-                    if (inventory && !cachePlayer.compareInventory(player.getInventory())) {
-                        cachePlayer.setInventory(player.getInventory());
-                        customSyncSettings.setSyncingInventory(true);
-                    }
-                    if (enderchest && !cachePlayer.compareEnderchest(player.getEnderChest())) {
-                        cachePlayer.setEnderchest(player.getEnderChest());
-                        customSyncSettings.setSyncingEnderchest(true);
-                    }
-                    if (exp && !cachePlayer.compareExp(player.getLevel())) {
-                        cachePlayer.setExp(player.getLevel());
-                        customSyncSettings.setSyncingExp(true);
-                    }
-                    if (gamemode && !cachePlayer.compareGamemode(player.getGameMode())) {
-                        cachePlayer.setGamemode(player.getGameMode());
-                        customSyncSettings.setSyncingGamemode(true);
-                    }
-                    if (hunger && !cachePlayer.compareHunger(player.getFoodLevel())) {
-                        cachePlayer.setHunger(player.getFoodLevel());
-                        customSyncSettings.setSyncingHunger(true);
-                    }
-                    if (health && !cachePlayer.compareHealth(player.getHealth())) {
-                        cachePlayer.setHealth(player.getHealth());
-                        customSyncSettings.setSyncingHealth(true);
-                    }
-                    if (effects && !cachePlayer.compareEffects(player.getActivePotionEffects())) {
-                        cachePlayer.setEffects(player.getActivePotionEffects());
-                        customSyncSettings.setSyncingEffects(true);
-                    }
-                    if (advancements && !cachePlayer.compareAdvancements(AdvancementManager.getAdvancementMap(player))) {
-                        cachePlayer.setAdvancements(AdvancementManager.getAdvancementMap(player));
-                        customSyncSettings.setSyncingAdvancements(true);
-                    }
-                    if (statistics && !cachePlayer.compareStatistics(StatisticsManager.getStatisticsMap(player))) {
-                        cachePlayer.setStatistics(StatisticsManager.getStatisticsMap(player));
-                        customSyncSettings.setSyncingStatistics(true);
-                    }
-                    MainManageData.savePlayer(player, customSyncSettings);
-                }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            CachePlayer cachePlayer;
+            if (playerCache.containsKey(player)) {
+                cachePlayer = playerCache.get(player);
+            } else {
+                cachePlayer = new CachePlayer(player);
+                playerCache.put(player, cachePlayer);
             }
-        }, 0L, ConfigManager.config.getInt("settings.backup.backupCycle"));
+            CustomSyncSettings customSyncSettings = new CustomSyncSettings();
+            if (inventory && !cachePlayer.compareInventory(player.getInventory())) {
+                cachePlayer.setInventory(player.getInventory());
+                customSyncSettings.setSyncingInventory(true);
+            }
+            if (enderchest && !cachePlayer.compareEnderchest(player.getEnderChest())) {
+                cachePlayer.setEnderchest(player.getEnderChest());
+                customSyncSettings.setSyncingEnderchest(true);
+            }
+            if (exp && !cachePlayer.compareExp(player.getLevel())) {
+                cachePlayer.setExp(player.getLevel());
+                customSyncSettings.setSyncingExp(true);
+            }
+            if (gamemode && !cachePlayer.compareGamemode(player.getGameMode())) {
+                cachePlayer.setGamemode(player.getGameMode());
+                customSyncSettings.setSyncingGamemode(true);
+            }
+            if (hunger && !cachePlayer.compareHunger(player.getFoodLevel())) {
+                cachePlayer.setHunger(player.getFoodLevel());
+                customSyncSettings.setSyncingHunger(true);
+            }
+            if (health && !cachePlayer.compareHealth(player.getHealth())) {
+                cachePlayer.setHealth(player.getHealth());
+                customSyncSettings.setSyncingHealth(true);
+            }
+            if (effects && !cachePlayer.compareEffects(player.getActivePotionEffects())) {
+                cachePlayer.setEffects(player.getActivePotionEffects());
+                customSyncSettings.setSyncingEffects(true);
+            }
+            if (advancements && !cachePlayer.compareAdvancements(AdvancementManager.getAdvancementMap(player))) {
+                cachePlayer.setAdvancements(AdvancementManager.getAdvancementMap(player));
+                customSyncSettings.setSyncingAdvancements(true);
+            }
+            if (statistics && !cachePlayer.compareStatistics(StatisticsManager.getStatisticsMap(player))) {
+                cachePlayer.setStatistics(StatisticsManager.getStatisticsMap(player));
+                customSyncSettings.setSyncingStatistics(true);
+            }
+            MainManageData.savePlayer(player, customSyncSettings);
+        }
     }
 
     public static void shutdown() {
-        Bukkit.getScheduler().cancelTask(id);
+        Main.schedulerManager.getScheduler().cancelBackupTask();
     }
 
     public static Boolean getSaveBool(String key) {

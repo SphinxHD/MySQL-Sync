@@ -59,12 +59,7 @@ public class JoinListener implements Listener {
         }
         player.sendMessage(ConfigManager.getColoredString("messages.loading"));
         Bukkit.getPluginManager().callEvent(new ProcessingLoadingPlayerDataEvent(player, new SyncSettings()));
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Main.main, new Runnable() {
-            @Override
-            public void run() {
-                MainManageData.loadPlayer(player);
-            }
-        }, 40l);
+        Main.schedulerManager.getScheduler().scheduleJoin(player);
     }
 
     @EventHandler

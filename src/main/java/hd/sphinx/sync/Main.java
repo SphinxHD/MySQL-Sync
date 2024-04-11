@@ -3,6 +3,7 @@ package hd.sphinx.sync;
 import hd.sphinx.sync.listener.*;
 import hd.sphinx.sync.util.ConfigManager;
 import hd.sphinx.sync.util.Updater;
+import hd.sphinx.sync.util.scheduler.SchedulerManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -23,6 +24,8 @@ public class Main extends JavaPlugin {
 
     public static Main main;
     public static Logger logger;
+
+    public static SchedulerManager schedulerManager;
 
     public static Boolean isStopping = false;
 
@@ -55,6 +58,8 @@ public class Main extends JavaPlugin {
         logger = this.getLogger();
 
         Metrics metrics = new Metrics(this, 15003);
+
+        schedulerManager = new SchedulerManager();
 
         saveDefaultConfig();
         ConfigManager.reload();
