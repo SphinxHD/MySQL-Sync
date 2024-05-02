@@ -6,7 +6,7 @@
 
     <groupId>hd.sphinx</groupId>
     <artifactId>MySQL-Sync</artifactId>
-    <version>1.4.11</version>
+    <version>1.4.12-INDEV</version>
     <packaging>jar</packaging>
 
     <name>MySQL-Sync</name>

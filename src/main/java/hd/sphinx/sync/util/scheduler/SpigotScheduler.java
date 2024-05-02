@@ -34,12 +34,12 @@ public class SpigotScheduler implements Scheduler {
 
     @Override
     public void scheduleJoin(Player player) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Main.main, new Runnable() {
+        Bukkit.getScheduler().runTaskLater(Main.main, new Runnable() {
             @Override
             public void run() {
                 MainManageData.loadPlayer(player);
             }
-        }, 40l);
+        }, 40L);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SpigotScheduler implements Scheduler {
                     player.performCommand(command.replaceFirst("/", ""));
                 }
             }
-        }, 5l);
+        }, 5L);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SpigotScheduler implements Scheduler {
             public void run() {
                 ManageMySQLData.generatePlayer(player);
             }
-        }, 20);
+        }, 20L);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class SpigotScheduler implements Scheduler {
             public void run() {
                 ManageMySQLData.savePlayer(player, invBase64, ecBase64);
             }
-        }, 20);
+        }, 20L);
     }
 
     @Override
@@ -102,6 +102,6 @@ public class SpigotScheduler implements Scheduler {
             public void run() {
                 ManageMySQLData.savePlayer(player, customSyncSettings);
             }
-        }, 20);
+        }, 20L);
     }
 }
