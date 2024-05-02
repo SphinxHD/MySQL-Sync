@@ -44,9 +44,9 @@ public class FoliaScheduler implements Scheduler {
 
     @Override
     public void scheduleJoin(Player player) {
-        asyncScheduler.runDelayed(Main.main, t -> {
+        globalRegionScheduler.runDelayed(Main.main, t -> {
             MainManageData.loadPlayer(player);
-        }, 2L, TimeUnit.SECONDS);
+        }, 40L);
     }
 
     @Override
