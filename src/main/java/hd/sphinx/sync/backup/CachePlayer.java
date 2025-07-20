@@ -2,6 +2,7 @@ package hd.sphinx.sync.backup;
 
 import hd.sphinx.sync.util.AdvancementManager;
 import hd.sphinx.sync.util.StatisticsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
@@ -30,13 +31,15 @@ public class CachePlayer {
         this.player = player;
         this.inventory = player.getInventory();
         this.enderchest = player.getEnderChest();
-        this.exp = player.getLevel();
+        this.exp = (int) player.getExp();
         this.gamemode = player.getGameMode();
         this.hunger = player.getFoodLevel();
         this.health = player.getHealth();
         this.effects = player.getActivePotionEffects();
-        this.advancements = AdvancementManager.getAdvancementMap(player);
-        this.statistics = StatisticsManager.getStatisticsMap(player);
+        if (Bukkit.getServer().getVersion().contains("1.21.6") || Bukkit.getServer().getVersion().contains("1.21.7")) {
+            this.advancements = AdvancementManager.getAdvancementMap(player);
+            this.statistics = StatisticsManager.getStatisticsMap(player);
+        }
     }
 
     public Player getPlayer() {

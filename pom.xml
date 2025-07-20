@@ -6,7 +6,11 @@
 
     <groupId>hd.sphinx</groupId>
     <artifactId>MySQL-Sync</artifactId>
+<<<<<<< Updated upstream
     <version>1.4.12</version>
+=======
+    <version>1.4.15-DEV-02</version>
+>>>>>>> Stashed changes
     <packaging>jar</packaging>
 
     <name>MySQL-Sync</name>

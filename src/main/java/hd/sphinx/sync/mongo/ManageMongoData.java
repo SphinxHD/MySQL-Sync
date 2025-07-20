@@ -97,7 +97,7 @@ public class ManageMongoData {
             result = String.valueOf(document.getInteger("exp"));
             try {
                 if (result != null && ConfigManager.getBoolean("settings.syncing.exp")) {
-                    player.setLevel(Integer.parseInt(result));
+                    player.setExp(Integer.parseInt(result));
                     syncProfile.setExp(Integer.parseInt(result));
                     result = null;
                 }
@@ -180,8 +180,8 @@ public class ManageMongoData {
                 syncProfile.setEnderChest(player.getEnderChest());
             }
             if (ConfigManager.getBoolean("settings.syncing.exp")) {
-                document.append("exp", player.getLevel());
-                syncProfile.setExp(player.getLevel());
+                document.append("exp", (int) player.getExp());
+                syncProfile.setExp((int) player.getExp());
             }
             if (ConfigManager.getBoolean("settings.syncing.effects")) {
                 Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
@@ -245,8 +245,8 @@ public class ManageMongoData {
                 syncProfile.setEnderChest(player.getEnderChest());
             }
             if (customSyncSettings.isSyncingExp()) {
-                document.append("exp", player.getLevel());
-                syncProfile.setExp(player.getLevel());
+                document.append("exp", (int) player.getExp());
+                syncProfile.setExp((int) player.getExp());
             }
             if (customSyncSettings.isSyncingEffects()) {
                 Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
