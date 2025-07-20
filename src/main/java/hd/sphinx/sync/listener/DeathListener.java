@@ -19,9 +19,14 @@ public class DeathListener implements Listener {
         deadPlayers.add(event.getEntity());
     }
 
+    public static void triggerRespawn(Player player) {
+        if (ConfigManager.getBoolean("settings.onlySyncPermission").booleanValue() && !player.hasPermission("sync.sync"))
+            return;
+        deadPlayers.remove(player);
+    }
+
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        if (ConfigManager.getBoolean("settings.onlySyncPermission") && !event.getPlayer().hasPermission("sync.sync")) return;
-        deadPlayers.remove(event.getPlayer());
+        triggerRespawn(event.getPlayer());
     }
 }

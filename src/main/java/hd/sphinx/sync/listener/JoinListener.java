@@ -57,7 +57,9 @@ public class JoinListener implements Listener {
                 player.setLevel(0);
             }
         }
-        player.sendMessage(ConfigManager.getColoredString("messages.loading"));
+        if (ConfigManager.getBoolean("settings.sending.loading")) {
+            player.sendMessage(ConfigManager.getColoredString("messages.loading"));
+        }
         Bukkit.getPluginManager().callEvent(new ProcessingLoadingPlayerDataEvent(player, new SyncSettings()));
         Main.schedulerManager.getScheduler().scheduleJoin(player);
     }

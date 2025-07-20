@@ -108,7 +108,7 @@ public class ManageMySQLData {
                 result = resultSet.getString("exp");
                 try {
                     if (result != null && ConfigManager.getBoolean("settings.syncing.exp")) {
-                        player.setLevel(Integer.parseInt(result));
+                        player.setExp(Integer.parseInt(result));
                         syncProfile.setExp(Integer.parseInt(result));
                         result = null;
                     }
@@ -224,8 +224,8 @@ public class ManageMySQLData {
                     preparedStatement.setString(real, ecBase64);
                     syncProfile.setEnderChest(player.getEnderChest());
                 } else if (string.contains("exp")) {
-                    preparedStatement.setInt(real, player.getLevel());
-                    syncProfile.setExp(player.getLevel());
+                    preparedStatement.setInt(real, (int) player.getExp());
+                    syncProfile.setExp((int) player.getExp());
                 } else if (string.contains("effects")) {
                     Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
                     PotionEffect[] effectArray = new ArrayList<PotionEffect>(effectCollection).toArray(new PotionEffect[0]);
@@ -323,8 +323,8 @@ public class ManageMySQLData {
                     preparedStatement.setString(real, InventoryManager.saveEChest(player));
                     syncProfile.setEnderChest(player.getEnderChest());
                 } else if (string.contains("exp")) {
-                    preparedStatement.setInt(real, player.getLevel());
-                    syncProfile.setExp(player.getLevel());
+                    preparedStatement.setInt(real, (int) player.getExp());
+                    syncProfile.setExp((int) player.getExp());
                 } else if (string.contains("effects")) {
                     Collection<PotionEffect> effectCollection = player.getActivePotionEffects();
                     PotionEffect[] effectArray = new ArrayList<PotionEffect>(effectCollection).toArray(new PotionEffect[0]);
