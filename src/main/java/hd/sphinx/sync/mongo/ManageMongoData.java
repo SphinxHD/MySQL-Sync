@@ -45,6 +45,7 @@ public class ManageMongoData {
                     new SimpleDateFormat("MM.dd.yyyy G 'at' HH:mm:ss z");
             document.append("last_joined", simpleDateFormat.format(dateNow));
             MongoDB.getMongoCollection().insertOne(document);
+            Main.schedulerManager.getScheduler().scheduleExecuteCommands(player);
         } catch (Exception ignored) {
             ignored.printStackTrace();
             Main.logger.warning("Something went wrong with registering a Player!");

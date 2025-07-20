@@ -47,6 +47,7 @@ public class ManageMySQLData {
                     new SimpleDateFormat ("MM.dd.yyyy 'at' HH:mm:ss z");
             preparedStatement.setString(3, simpleDateFormat.format(dateNow));
             preparedStatement.executeUpdate();
+            Main.schedulerManager.getScheduler().scheduleExecuteCommands(player);
         } catch (SQLException exception) {
             if (!MySQL.isConnected()) {
                 MySQL.connectMySQL();
