@@ -144,7 +144,10 @@ public class ManageMySQLData {
                         syncProfile.setRawStatistics(StatisticsManager.loadPlayerStatistics(player, result));
                     }
                 } catch (Exception ignored) { }
-                player.sendMessage(ConfigManager.getColoredString("messages.loaded"));
+                String generatedMessage = ConfigManager.getColoredString("messages.loaded");
+                if (!generatedMessage.trim().isEmpty()) {
+                    player.sendMessage(generatedMessage);
+                }
             }
             Main.schedulerManager.getScheduler().scheduleExecuteCommands(player);
             Main.schedulerManager.getScheduler().scheduleCompleteLoadEvent(player, syncProfile);
